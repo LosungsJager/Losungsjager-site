@@ -1,34 +1,38 @@
 import React from 'react';
 
-const PostCard = () => {
+// O componente agora recebe parâmetros (props) para ser preenchido dinamicamente
+const PostCard = ({ teamNumber, badgeText, title, content, buttonText, buttonLink, imageUrl }) => {
   return (
-    <div className="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden border-b-4 border-equipe-ciano transition-transform duration-300 hover:-translate-y-2">
+    <div className="flex flex-col max-w-md bg-white rounded-xl shadow-lg overflow-hidden border-b-4 border-equipe-ciano transition-transform duration-300 hover:-translate-y-2">
       
+      {/* Imagem do Post (Só aparece se você enviar um link de imagem) */}
+      {imageUrl && (
+        <img src={imageUrl} alt={title} className="w-full h-48 object-cover" />
+      )}
+
       {/* Cabeçalho do Cartão */}
       <div className="bg-equipe-roxo text-white px-6 py-4 flex justify-between items-center">
-        <h2 className="text-lg font-bold m-0">Equipe #21342</h2>
-        {/* Badge Ciano com texto escuro para contraste */}
+        <h2 className="text-lg font-bold m-0">{teamNumber}</h2>
         <span className="bg-equipe-ciano text-teal-950 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wide">
-          Nacional FTC
+          {badgeText}
         </span>
       </div>
 
       {/* Corpo do Cartão */}
-      <div className="p-6">
-        <h3 className="text-equipe-roxo text-2xl font-bold mb-3">
-          Lösungsjäger
-        </h3>
+      <div className="p-6 flex flex-col flex-grow">
+        <h3 className="text-equipe-roxo text-2xl font-bold mb-3">{title}</h3>
         
-        <p className="text-gray-600 text-base leading-relaxed mb-6">
-          Nos dias 5, 6, 7 e 8 de março ocorreu a etapa nacional do torneio de robótica da FIRST, onde éramos umas das 3 equipes do Rio Grande do Sul presentes e competindo o torneio de FTC. Obrigado @soufarroupilha por nos proporcionar essa oportunidade!
+        {/* Usamos flex-grow para que os botões fiquem alinhados embaixo se os textos tiverem tamanhos diferentes */}
+        <p className="text-gray-600 text-base leading-relaxed mb-6 flex-grow">
+          {content}
         </p>
 
-        {/* Botão com efeito Hover Neon */}
+        {/* Botão Dinâmico */}
         <a
-          href="#"
-          className="inline-block bg-equipe-ciano text-teal-950 font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:bg-equipe-roxo hover:text-white hover:shadow-[0_0_15px_rgba(50,197,210,0.6)]"
+          href={buttonLink}
+          className="inline-block text-center bg-equipe-ciano text-teal-950 font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:bg-equipe-roxo hover:text-white hover:shadow-[0_0_15px_rgba(50,197,210,0.6)]"
         >
-          Ver mais fotos
+          {buttonText}
         </a>
       </div>
       
