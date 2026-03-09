@@ -3,145 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Losungsjager | Caçador de Soluções</title>
+    <title>Lösungsjäger #21342 | FTC Team</title>
     <style>
-        /* Variáveis de Cores para facilitar a edição */
+        /* Variáveis de Cores - Edite aqui para as cores exatas da equipe! */
         :root {
-            --bg-color: #0f172a; /* Azul muito escuro */
-            --text-color: #f8fafc; /* Branco suave */
-            --accent-color: #06b6d4; /* Ciano Neon */
-            --accent-hover: #0891b2;
+            --bg-color: #0d0d0d; /* Fundo escuro */
+            --bg-card: #1a1a1a; /* Fundo dos blocos */
+            --text-color: #ffffff; /* Texto principal */
+            --text-muted: #a0a0a0; /* Texto secundário */
+            --accent-color: #ff5500; /* COR PRINCIPAL DA EQUIPE (Mudei para um laranja tech, altere se precisar) */
+            --accent-hover: #cc4400;
         }
 
-        /* Reset básico */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
-        /* Navegação */
+        /* --- NAVEGAÇÃO --- */
         header {
-            padding: 20px 50px;
+            padding: 15px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(13, 13, 13, 0.9);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-color);
+            backdrop-filter: blur(10px);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            color: var(--text-color);
-            text-decoration: none;
-        }
-
-        .logo span {
-            color: var(--accent-color);
+        .logo img {
+            height: 50px; /* Ajusta o tamanho do seu logo branco */
+            vertical-align: middle;
         }
 
         nav a {
             color: var(--text-color);
             text-decoration: none;
-            margin-left: 20px;
-            transition: color 0.3s ease;
+            margin-left: 25px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            transition: color 0.3s;
         }
 
         nav a:hover {
             color: var(--accent-color);
         }
 
-        /* Seção Principal (Hero) */
+        /* --- HERO SECTION (Início) --- */
         .hero {
-            height: 80vh;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             padding: 0 20px;
+            /* Se quiser, depois colocamos a foto da equipe de fundo aqui! */
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('12E226E9-6D7C-46BF-9CA1-16F41E076D5B.jpeg') center/cover;
+            margin-top: 0;
+        }
+
+        .hero h2 {
+            color: var(--accent-color);
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
         }
 
         .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 10px;
-            animation: fadeInDown 1s ease-out;
+            font-size: 5rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
         }
 
         .hero p {
             font-size: 1.2rem;
-            color: #94a3b8;
-            max-width: 600px;
-            margin-bottom: 30px;
-            animation: fadeInUp 1s ease-out 0.5s both;
+            max-width: 700px;
+            color: #ddd;
+            margin-bottom: 40px;
         }
 
-        /* Botão com efeito Neon */
-        .btn-neon {
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            color: var(--accent-color);
-            background: transparent;
-            border: 2px solid var(--accent-color);
-            border-radius: 5px;
+        .btn {
+            padding: 15px 35px;
+            background-color: var(--accent-color);
+            color: white;
             text-decoration: none;
+            font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            animation: fadeInUp 1s ease-out 0.8s both;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            border: 2px solid var(--accent-color);
         }
 
-        .btn-neon:hover {
-            background: var(--accent-color);
-            color: var(--bg-color);
-            box-shadow: 0 0 10px var(--accent-color), 0 0 40px var(--accent-color), 0 0 80px var(--accent-color);
+        .btn:hover {
+            background-color: transparent;
+            color: var(--accent-color);
+            box-shadow: 0 0 20px var(--accent-color);
         }
 
-        /* Animações */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* --- SEÇÕES GERAIS --- */
+        section {
+            padding: 100px 50px;
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--accent-color);
+            text-transform: uppercase;
         }
 
-        /* Responsividade para celulares */
-        @media (max-width: 768px) {
-            header { flex-direction: column; gap: 15px; }
-            .hero h1 { font-size: 2.5rem; }
+        /* --- GRID DE ENGENHARIA E EQUIPE --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            padding: 30px;
+            border-radius: 8px;
+            border-top: 4px solid var(--accent-color);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: var(--text-muted);
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background-color: var(--bg-card);
+            border-top: 1px solid #333;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <a href="#" class="logo">Losungs<span>jager</span></a>
+        <a href="#" class="logo">
+            <img src="LOGO BRANCO.png" alt="Logo Lösungsjäger">
+        </a>
         <nav>
-            <a href="#sobre">Sobre</a>
-            <a href="#projetos">Projetos</a>
-            <a href="#contato">Contato</a>
+            <a href="#home">Início</a>
+            <a href="#equipe">A Equipe</a>
+            <a href="#engenharia">O Robô</a>
+            <a href="#outreach">Outreach</a>
         </nav>
     </header>
 
-    <section class="hero">
-        <h1>Construindo o Futuro</h1>
-        <p>Desenvolvimento, tecnologia e soluções caçadas a dedo para os seus maiores desafios. Bem-vindo ao meu espaço na web.</p>
-        <a href="#projetos" class="btn-neon">Ver Projetos</a>
+    <section id="home" class="hero">
+        <h2>FTC TEAM #21342</h2>
+        <h1>Lösungsjäger</h1>
+        <p>Os caçadores de soluções adquirindo novas habilidades. Representando o Colégio Farroupilha na temporada DECODE 2026.</p>
+        <a href="#engenharia" class="btn">Conheça nosso Robô</a>
     </section>
+
+    <section id="equipe">
+        <h2 class="section-title">Nossas Áreas</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>⚙️ Mecânica</h3>
+                <p>Responsáveis por dar vida às ideias. Projetamos, montamos e testamos cada peça, garantindo que o robô seja robusto e eficiente na arena.</p>
+            </div>
+            <div class="card">
+                <h3>💻 Programação</h3>
+                <p>O cérebro da operação. Desenvolvemos o código autônomo e teleoperado para que o robô execute as missões com precisão milimétrica.</p>
+            </div>
+            <div class="card">
+                <h3>🤝 Outreach</h3>
+                <p>Nossa conexão com a comunidade. Espalhamos os valores da FIRST, buscamos parcerias e compartilhamos nosso conhecimento com o mundo.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="engenharia" style="background-color: #111;">
+        <h2 class="section-title">Engenharia em Foco</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>O Captador de Artifacts</h3>
+                <p>Nossa evolução foi constante. Da V1 com pouca estabilidade, passamos para a V3 utilizando acrílico e elásticos, reduzindo o atrito e garantindo uma coleta 100% confiável e alinhada com o lançador.</p>
+            </div>
+            <div class="card">
+                <h3>Portfólio de Engenharia</h3>
+                <p>Toda a nossa jornada, desde os primeiros rascunhos até a construção final do robô da temporada Decode, está documentada de forma detalhada e técnica.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Lösungsjäger FTC Team #21342. Desenvolvido com ☕ pela equipe de programação.</p>
+    </footer>
 
 </body>
 </html>
