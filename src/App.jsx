@@ -56,4 +56,38 @@ function App() {
             />
             
             {/* Indicadores estilo Carrossel */}
-            <div className="flex gap-3 mt-8 relative z-10
+            <div className="flex gap-3 mt-8 relative z-10">
+              <span className="w-8 h-2.5 rounded-full bg-equipe-roxo transition-all"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-gray-200 hover:bg-equipe-ciano transition-colors cursor-pointer"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-gray-200 hover:bg-equipe-ciano transition-colors cursor-pointer"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-gray-200 hover:bg-equipe-ciano transition-colors cursor-pointer"></span>
+            </div>
+          </div>
+
+          {/* Lado Direito: Texto com tipografia moderna */}
+          <div className="w-full md:w-1/2 text-center md:text-left">
+            <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8 tracking-tight">
+              Por que <span className="text-transparent bg-clip-text bg-gradient-to-r from-equipe-roxo to-indigo-600">Lösungsjäger?</span>
+            </h2>
+            
+            <p className="text-lg text-gray-600 leading-relaxed font-medium mb-6">
+              O nome da equipe é em alemão e significa <strong className="text-gray-900">"caçadores de soluções"</strong>. A escolha desse termo alinha-se com a nossa filosofia: sempre visamos encontrar soluções inteligentes e criativas para os problemas que surgem.
+            </p>
+            
+            <p className="text-lg text-gray-600 leading-relaxed font-medium">
+              Além disso, como o Colégio Farroupilha tem sua história entrelaçada com a imigração alemã para o Sul do Brasil, optamos por honrar essa herança no idioma.
+            </p>
+
+            <button className="mt-10 px-8 py-4 bg-gray-900 text-white rounded-full font-bold hover:bg-equipe-roxo transition-colors duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1">
+              Conheça nossa História
+            </button>
+          </div>
+
+        </div>
+      </main>
+
+    </div>
+  );
+}
+
+export default App;
