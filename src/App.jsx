@@ -4,10 +4,9 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
       
-      {/* 1. NAVBAR */}
+      {/* 1. NAVBAR - Estilo limpo e fixo */}
       <nav className="bg-white px-8 py-4 flex justify-between items-center shadow-sm sticky top-0 z-50">
         <div className="flex items-center gap-2">
-          {/* Logo G Pequena */}
           <img src="/03_LÖSUNGSJÄGER-03 (1).png" alt="Logo" className="h-8" />
           <span className="font-bold text-lg tracking-tight">Lösungsjäger</span>
         </div>
@@ -19,27 +18,34 @@ function App() {
         </div>
       </nav>
 
-      {/* 2. BANNER ROXO */}
-      <div className="bg-purple-900 py-16 flex justify-center">
-        <img src="/12E226E9-6D7C-46BF-9CA1-16F41E076D5B.jpeg" alt="Logo Central" className="h-20" />
+      {/* 2. BANNER ROXO - Ocupando a tela como fundo */}
+      <div className="bg-purple-900 h-[50vh] flex flex-col items-center justify-center relative">
+        <img 
+          src="/12E226E9-6D7C-46BF-9CA1-16F41E076D5B.jpeg" 
+          alt="Logo Central" 
+          className="w-full max-w-2xl px-6 object-contain" 
+        />
+        
+        {/* 3. CARTÃO SOBREPOSTO - O segredo é o posicionamento absoluto */}
+        <div className="absolute -bottom-32 w-full max-w-4xl px-4">
+          <div className="bg-slate-200 p-10 rounded-3xl shadow-2xl border border-slate-300">
+            <h2 className="text-3xl font-bold text-center mb-6">Por que Lösungsjäger?</h2>
+            <p className="text-slate-700 leading-relaxed text-lg text-center">
+              O nome da equipe, Lösungsjäger, é em alemão e significa "caçadores de soluções". 
+              A escolha desse termo alinha-se com a filosofia da equipe, na qual sempre visamos 
+              encontrar soluções inteligentes e criativas para os problemas que surgem durante os 
+              encontros. Além disso, como o Colégio Farroupilha tem sua história entrelaçada com a 
+              imigração alemã para o Sul do Brasil, optamos pelo termo nesse idioma.
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* 3. CARTÃO DE CONTEÚDO (O cinza que você pediu) */}
-      <main className="max-w-4xl mx-auto -mt-10 px-4">
-        <div className="bg-slate-200 p-10 rounded-3xl shadow-lg border border-slate-300">
-          <h2 className="text-3xl font-bold text-center mb-6">Por que Lösungsjäger?</h2>
-          <p className="text-slate-700 leading-relaxed text-lg">
-            O nome da equipe, Lösungsjäger, é em alemão e significa "caçadores de soluções". 
-            A escolha desse termo alinha-se com a filosofia da equipe, na qual sempre visamos 
-            encontrar soluções inteligentes e criativas para os problemas que surgem durante os 
-            encontros. Além disso, como o Colégio Farroupilha tem sua história entrelaçada com a 
-            imigração alemã para o Sul do Brasil, optamos pelo termo nesse idioma.
-          </p>
-        </div>
-      </main>
+      {/* ESPAÇAMENTO PARA O RODAPÉ NÃO FICAR EM CIMA DO CARTÃO */}
+      <div className="mt-48"></div>
 
       {/* RODAPÉ */}
-      <footer className="mt-20 py-10 flex justify-center">
+      <footer className="py-10 flex justify-center border-t border-slate-200">
         <img src="/03_LÖSUNGSJÄGER-02.png" alt="Logo Rodapé" className="h-16" />
       </footer>
     </div>
