@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lösungsjäger #21342 — FTC Robotics</title>
+
+  <!-- Primary Meta -->
+  <title>Lösungsjäger #21342 — FTC Robotics | Porto Alegre</title>
+  <meta name="description" content="Equipe de robótica do Colégio Farroupilha, Porto Alegre, RS. Participamos da FIRST Tech Challenge e acreditamos que tecnologia transforma vidas." />
+  <meta name="keywords" content="robótica, FTC, FIRST Tech Challenge, Lösungsjäger, Porto Alegre, Colégio Farroupilha, robô, programação, engenharia" />
+  <meta name="author" content="Lösungsjäger #21342" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://losungsjager.vercel.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://losungsjager.vercel.app/" />
+  <meta property="og:title"       content="Lösungsjäger #21342 — FTC Robotics" />
+  <meta property="og:description" content="Os Caçadores de Soluções — equipe de robótica do Colégio Farroupilha movida por curiosidade, paixão e tecnologia." />
+  <meta property="og:image"       content="https://losungsjager.vercel.app/logo-full.png" />
+  <meta property="og:locale"      content="pt_BR" />
+  <meta property="og:site_name"   content="Lösungsjäger #21342" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Lösungsjäger #21342 — FTC Robotics" />
+  <meta name="twitter:description" content="Os Caçadores de Soluções — equipe de robótica do Colégio Farroupilha movida por curiosidade, paixão e tecnologia." />
+  <meta name="twitter:image"       content="https://losungsjager.vercel.app/logo-full.png" />
+
+  <!-- Theme color -->
+  <meta name="theme-color" content="#0E0E16" id="meta-theme" />
+
+  <!-- Icons -->
   <link rel="icon" type="image/png" href="logo-icon.png" />
+  <link rel="apple-touch-icon"     href="logo-icon.png" />
+
+  <!-- Fonts (preconnect for speed) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -36,8 +68,8 @@
       position:fixed; top:0; left:0; right:0; z-index:1000;
       display:flex; align-items:center; justify-content:space-between;
       padding:0 48px; height:86px;
-      background:rgba(14,14,22,.94); backdrop-filter:blur(20px);
-      border-bottom:1px solid rgba(0,212,212,.18);
+      background:var(--nav-bg); backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--nav-border);
       box-shadow:0 1px 32px rgba(0,212,212,.05);
       transition:box-shadow .3s;
     }
@@ -721,6 +753,247 @@
       .hero-btns { flex-direction:column; }
       .btn-primary, .btn-secondary { text-align:center; }
     }
+
+    /* ── LIGHT MODE VARIABLES ── */
+    [data-theme="light"] {
+      --purple: #6A1FA8;
+      --purple-light: #8040C0;
+      --purple-dark: #3A0878;
+      --cyan: #0099A8;
+      --black: #F0EFF8;
+      --dark: #E6E4F4;
+      --surface: #DDDAEE;
+      --surface2: #D0CCDF;
+      --text: #2A2240;
+      --text-bright: #120E28;
+      --text-dim: #5A5070;
+      --nav-bg: rgba(240,239,248,.96);
+      --nav-border: rgba(0,153,168,.22);
+    }
+
+    [data-theme="dark"] {
+      --nav-bg: rgba(14,14,22,.94);
+      --nav-border: rgba(0,212,212,.18);
+    }
+
+    /* theme-aware noise: lighter in light mode */
+    [data-theme="light"] body::before { opacity:.08; }
+
+    /* ── THEME TOGGLE BUTTON ── */
+    .theme-toggle {
+      background: none; border: 1px solid rgba(128,128,200,.25);
+      border-radius: 50%; width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-dim); font-size: 17px;
+      transition: border-color .2s, color .2s, transform .2s;
+      flex-shrink: 0; margin-left: 8px;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--cyan); color: var(--cyan);
+      transform: rotate(20deg);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--cyan); outline-offset: 3px;
+    }
+
+    /* icon swap */
+    .theme-toggle .icon-sun  { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    [data-theme="light"] .theme-toggle .icon-sun  { display: block; }
+    [data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+    /* ── BUTTON FEEDBACK (ripple + active state) ── */
+    .btn-primary, .btn-secondary, .nav-cta {
+      position: relative; overflow: hidden;
+    }
+
+    .btn-primary:active  { transform: scale(.97) translateY(0) !important; box-shadow: none !important; }
+    .btn-secondary:active { transform: scale(.97); }
+
+    /* focus-visible ring for keyboard nav */
+    .btn-primary:focus-visible,
+    .btn-secondary:focus-visible {
+      outline: 2px solid var(--cyan); outline-offset: 3px;
+    }
+
+    /* ripple */
+    .ripple {
+      position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,.25);
+      transform: scale(0); animation: rippleAnim .55s linear;
+      pointer-events: none;
+    }
+
+    @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
+
+    /* nav link active indicator */
+    .nav-links a.nav-active {
+      color: var(--cyan);
+      background: rgba(0,212,212,.07);
+    }
+
+    /* mobile link active */
+    .mob-drawer a.nav-active {
+      color: var(--cyan);
+      border-left-color: var(--cyan);
+      background: rgba(0,212,212,.06);
+    }
+
+    /* ── SMOOTH SCROLL OFFSET (accounts for fixed nav height) ── */
+    :target { scroll-margin-top: 96px; }
+    section[id], div[id] { scroll-margin-top: 96px; }
+
+    /* ── GITHUB SECTION ── */
+    .github-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .gh-card {
+      background: var(--surface);
+      padding: 36px 32px;
+      transition: background .2s;
+    }
+
+    .gh-card:hover { background: var(--surface2); }
+
+    .gh-card-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+
+    .gh-repo-name {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 14px; letter-spacing: 1px;
+      color: var(--cyan); font-weight: 600;
+    }
+
+    .gh-badge {
+      font-family: 'Share Tech Mono', monospace; font-size: 9px;
+      letter-spacing: 2px; text-transform: uppercase;
+      border: 1px solid rgba(155,89,212,.4); color: var(--purple-light);
+      padding: 3px 9px; border-radius: 100px;
+    }
+
+    .gh-desc { font-size: 15px; color: var(--text-dim); line-height: 1.75; margin-bottom: 20px; }
+
+    .gh-langs { display: flex; gap: 16px; margin-bottom: 28px; }
+
+    .gh-lang {
+      display: flex; align-items: center; gap: 6px;
+      font-family: 'Share Tech Mono', monospace; font-size: 11px;
+      letter-spacing: 1px; color: var(--text-dim);
+    }
+
+    .gh-lang-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+    .gh-btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+      color: var(--text-bright) !important; text-decoration: none;
+      padding: 13px 28px; border-radius: 3px;
+      font-family: 'Share Tech Mono', monospace; font-size: 12px;
+      letter-spacing: 2px; text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(123,47,190,.22);
+      transition: transform .2s, box-shadow .2s;
+      position: relative; overflow: hidden;
+    }
+
+    .gh-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(123,47,190,.38);
+    }
+
+    .gh-btn-primary:active { transform: scale(.97); box-shadow: none; }
+    .gh-btn-primary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+
+    /* code snippet */
+    .gh-snippet-col { display: flex; flex-direction: column; gap: 2px; }
+
+    .gh-snippet {
+      background: var(--dark); border: 1px solid rgba(216,216,232,.07);
+      overflow: hidden; flex: 1;
+    }
+
+    .gh-snippet-header {
+      background: var(--surface); padding: 10px 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .gh-dots { display: flex; gap: 5px; }
+    .gh-dots span {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(128,128,180,.2);
+    }
+    .gh-dots span:nth-child(1) { background: rgba(255,96,96,.4); }
+    .gh-dots span:nth-child(2) { background: rgba(255,200,0,.3); }
+    .gh-dots span:nth-child(3) { background: rgba(0,200,100,.3); }
+
+    .gh-file {
+      font-family: 'Share Tech Mono', monospace; font-size: 11px;
+      letter-spacing: 1px; color: var(--text-dim); flex: 1;
+    }
+
+    .gh-copy-btn {
+      font-family: 'Share Tech Mono', monospace; font-size: 10px;
+      letter-spacing: 1px; color: var(--text-dim); cursor: pointer;
+      padding: 3px 8px; border-radius: 3px; border: 1px solid transparent;
+      transition: color .2s, border-color .2s;
+    }
+
+    .gh-copy-btn:hover { color: var(--cyan); border-color: rgba(0,212,212,.3); }
+    .gh-copy-btn.copied { color: #6FD08A; border-color: rgba(111,208,138,.3); }
+
+    .gh-code {
+      padding: 20px 20px 24px;
+      font-family: 'Share Tech Mono', monospace; font-size: 12.5px;
+      line-height: 1.85; color: var(--text);
+      overflow-x: auto; white-space: pre;
+    }
+
+    /* syntax highlight colors */
+    .ck { color: var(--text-dim); font-style: italic; }   /* comment / keyword */
+    .ct { color: #79AAEF; }                                /* type */
+    .cm { color: var(--cyan); }                            /* method */
+    .cn { color: #F0A570; }                                /* number / literal */
+
+    /* link cards */
+    .gh-links { display: flex; flex-direction: column; gap: 2px; }
+
+    .gh-link-card {
+      background: var(--surface); padding: 18px 20px;
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none; transition: background .2s, border-color .2s;
+      border-left: 3px solid transparent;
+    }
+
+    .gh-link-card:hover {
+      background: var(--surface2);
+      border-left-color: var(--purple-light);
+    }
+
+    .gh-link-card:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+    .gh-link-card svg { color: var(--purple-light); flex-shrink: 0; }
+
+    .gh-link-title {
+      font-weight: 700; font-size: 14px; color: var(--text-bright);
+      display: block; margin-bottom: 2px;
+    }
+
+    .gh-link-sub {
+      font-family: 'Share Tech Mono', monospace; font-size: 10px;
+      letter-spacing: 1px; color: var(--text-dim);
+    }
+
+    .gh-arrow { color: var(--text-dim); margin-left: auto; transition: transform .2s; }
+    .gh-link-card:hover .gh-arrow { transform: translateX(4px); color: var(--cyan); }
+
+    @media (max-width:960px) {
+      .github-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -742,22 +1015,30 @@
     <li><a href="#outreach">Outreach</a></li>
     <li><a href="#conexoes">Conexões</a></li>
     <li><a href="#metas">Metas</a></li>
+    <li><a href="#codigo">Código</a></li>
     <li><a href="#patrocinador" class="nav-cta">Patrocinar</a></li>
   </ul>
 
-  <button class="hamburger" id="hbg" aria-label="Menu" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </button>
+  <div style="display:flex;align-items:center;gap:0;">
+    <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema claro/escuro" title="Alternar tema">
+      <span class="icon-moon" aria-hidden="true">🌙</span>
+      <span class="icon-sun"  aria-hidden="true">☀️</span>
+    </button>
+    <button class="hamburger" id="hbg" aria-label="Abrir menu de navegação" aria-expanded="false" aria-controls="mobMenu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- MOBILE DRAWER -->
-<div class="mob-drawer" id="mobMenu">
+<div class="mob-drawer" id="mobMenu" role="navigation" aria-label="Menu móvel">
   <a href="#sobre"        onclick="closeMenu()">Sobre</a>
   <a href="#equipe"       onclick="closeMenu()">Equipe</a>
   <a href="#robo"         onclick="closeMenu()">Robô</a>
   <a href="#outreach"     onclick="closeMenu()">Outreach</a>
   <a href="#conexoes"     onclick="closeMenu()">Conexões</a>
   <a href="#metas"        onclick="closeMenu()">Metas</a>
+  <a href="#codigo"       onclick="closeMenu()">Código</a>
   <a href="#patrocinador" onclick="closeMenu()" class="mob-cta">Patrocinar</a>
 </div>
 
@@ -1001,10 +1282,92 @@
   </div>
 </section>
 
+<!-- CÓDIGO / GITHUB -->
+<section id="codigo" class="sec-border" aria-label="Acesso ao código fonte no GitHub">
+  <div class="reveal">
+    <span class="sec-tag">// 07 — Código Aberto</span>
+    <h2 class="sec-title">Nosso <span>Código</span></h2>
+    <div class="sec-div"></div>
+  </div>
+  <div class="github-grid reveal">
+
+    <div class="gh-card gh-card-main">
+      <div class="gh-card-header">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:var(--cyan);flex-shrink:0"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        <span class="gh-repo-name">LosungsJager / Losungsjager-site</span>
+        <span class="gh-badge">Público</span>
+      </div>
+      <p class="gh-desc">Código-fonte completo do site oficial da equipe. HTML, CSS e JS em arquivo único — sem frameworks, sem dependências.</p>
+      <div class="gh-langs">
+        <span class="gh-lang"><span class="gh-lang-dot" style="background:#e34c26"></span>HTML</span>
+        <span class="gh-lang"><span class="gh-lang-dot" style="background:#563d7c"></span>CSS</span>
+        <span class="gh-lang"><span class="gh-lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+      </div>
+      <a href="https://github.com/LosungsJager/Losungsjager-site"
+         target="_blank" rel="noopener noreferrer"
+         class="gh-btn-primary"
+         aria-label="Ver repositório do site no GitHub">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        Ver no GitHub
+      </a>
+    </div>
+
+    <div class="gh-snippet-col">
+      <div class="gh-snippet">
+        <div class="gh-snippet-header">
+          <div class="gh-dots"><span></span><span></span><span></span></div>
+          <span class="gh-file">AutoAlign.java</span>
+          <span class="gh-copy-btn" onclick="copySnippet(this)" role="button" tabindex="0" aria-label="Copiar código" title="Copiar">⎘ copiar</span>
+        </div>
+        <pre class="gh-code" aria-label="Trecho do código de auto-alinhamento com AprilTag"><code><span class="ck">// Auto-Alinhamento com controle PD</span>
+<span class="ck">// Lösungsjäger #21342 — DECODE 2026</span>
+
+<span class="ct">double</span> tagError  = aprilTag.<span class="cm">getYaw</span>();
+<span class="ct">double</span> derivative = tagError - lastError;
+
+<span class="ct">double</span> turnPower  =
+  TAG_ALIGN_KP * tagError +
+  TAG_ALIGN_KD * derivative;
+
+drive.<span class="cm">setWeightedDrivePower</span>(
+  <span class="ck">new</span> <span class="cm">Pose2d</span>(<span class="cn">0</span>, <span class="cn">0</span>, turnPower)
+);
+
+lastError = tagError;</code></pre>
+      </div>
+
+      <div class="gh-links">
+        <a href="https://github.com/LosungsJager"
+           target="_blank" rel="noopener noreferrer"
+           class="gh-link-card"
+           aria-label="Perfil da organização Lösungsjäger no GitHub">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          <div>
+            <span class="gh-link-title">Organização no GitHub</span>
+            <span class="gh-link-sub">@LosungsJager</span>
+          </div>
+          <span class="gh-arrow" aria-hidden="true">→</span>
+        </a>
+        <a href="https://github.com/LosungsJager/Losungsjager-site/archive/refs/heads/main.zip"
+           class="gh-link-card"
+           aria-label="Baixar código-fonte do site em ZIP">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          <div>
+            <span class="gh-link-title">Download do código</span>
+            <span class="gh-link-sub">main.zip</span>
+          </div>
+          <span class="gh-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div>
-    <div class="ft-logo"><img src="logo-icon.png" alt="logo" /><span>Lösungsjäger #21342</span></div>
+    <div class="ft-logo"><img src="logo-icon.png" alt="Lösungsjäger logo" /><span>Lösungsjäger #21342</span></div>
     <p class="ft-sub">Colégio Farroupilha · Porto Alegre, RS · FIRST Tech Challenge</p>
   </div>
   <div class="ft-links">
@@ -1015,22 +1378,109 @@
 </footer>
 
 <script>
+  /* ── THEME TOGGLE ── */
+  const html     = document.documentElement;
+  const metaTheme = document.getElementById('meta-theme');
+  const DARK_COLOR  = '#0E0E16';
+  const LIGHT_COLOR = '#F0EFF8';
+
+  function applyTheme(theme) {
+    html.setAttribute('data-theme', theme);
+    metaTheme.setAttribute('content', theme === 'dark' ? DARK_COLOR : LIGHT_COLOR);
+    localStorage.setItem('lj-theme', theme);
+  }
+
+  // Restore saved preference
+  (function() {
+    const saved = localStorage.getItem('lj-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(saved || (prefersDark ? 'dark' : 'light'));
+  })();
+
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+  });
+
+  /* ── MOBILE MENU ── */
   function toggleMenu() {
-    document.getElementById('hbg').classList.toggle('open');
-    document.getElementById('mobMenu').classList.toggle('open');
+    const btn  = document.getElementById('hbg');
+    const menu = document.getElementById('mobMenu');
+    const open = menu.classList.toggle('open');
+    btn.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+    // prevent body scroll when menu open
+    document.body.style.overflow = open ? 'hidden' : '';
   }
 
   function closeMenu() {
     document.getElementById('hbg').classList.remove('open');
     document.getElementById('mobMenu').classList.remove('open');
+    document.getElementById('hbg').setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
   }
 
+  // Close on outside tap
   document.addEventListener('click', e => {
     const nav  = document.getElementById('main-nav');
     const menu = document.getElementById('mobMenu');
     if (menu.classList.contains('open') && !nav.contains(e.target) && !menu.contains(e.target)) closeMenu();
   });
 
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  /* ── SMOOTH SCROLL (polyfill for Safari) ── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      const offset = 96; // nav height + buffer
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+      // update URL without jumping
+      history.pushState(null, '', '#' + id);
+    });
+  });
+
+  /* ── NAV ACTIVE LINK on scroll ── */
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav-links a, .mob-drawer a');
+
+  function setActiveLink() {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('nav-active', a.getAttribute('href') === '#' + current);
+    });
+  }
+
+  window.addEventListener('scroll', setActiveLink, { passive: true });
+
+  /* ── RIPPLE on buttons ── */
+  function addRipple(e) {
+    const btn = e.currentTarget;
+    const circle = document.createElement('span');
+    const d = Math.max(btn.clientWidth, btn.clientHeight);
+    const r = btn.getBoundingClientRect();
+    circle.className = 'ripple';
+    circle.style.cssText = `width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;
+    btn.querySelector('.ripple')?.remove();
+    btn.appendChild(circle);
+    circle.addEventListener('animationend', () => circle.remove());
+  }
+
+  document.querySelectorAll('.btn-primary, .btn-secondary, .gh-btn-primary').forEach(btn => {
+    btn.addEventListener('click', addRipple);
+  });
+
+  /* ── VERSION TABS ── */
   function showV(btn, id) {
     const panel = btn.closest('.ver-panel');
     panel.querySelectorAll('.vtab').forEach(b => b.classList.remove('active'));
@@ -1039,11 +1489,34 @@
     document.getElementById(id).classList.add('active');
   }
 
+  /* ── COPY CODE SNIPPET ── */
+  function copySnippet(btn) {
+    const code = btn.closest('.gh-snippet').querySelector('code');
+    // strip span tags to get plain text
+    const text = code.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ copiado';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = '⎘ copiar'; btn.classList.remove('copied'); }, 2000);
+    });
+  }
+
+  /* ── SCROLL REVEAL ── */
   const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold:.08 });
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: .08 });
 
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  /* ── NAV SHADOW on scroll ── */
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('main-nav');
+    nav.style.boxShadow = window.scrollY > 60
+      ? '0 2px 40px rgba(0,100,100,.12)'
+      : '0 1px 32px rgba(0,212,212,.05)';
+  }, { passive: true });
 </script>
 </body>
 </html>
