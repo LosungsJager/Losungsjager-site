@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lösungsjäger #21342 — FTC Robotics</title>
+  <link rel="icon" type="image/png" href="logo-icon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --purple: #7B2FBE;
+      --purple-light: #9B59D4;
+      --purple-dark: #4A0D8F;
+      --cyan: #00D4D4;
+      --cyan-dark: #00A8A8;
+      --black: #070709;
+      --dark: #0D0D14;
+      --dark2: #13131E;
+      --gray: #1E1E2E;
+      --text: #E8E8F0;
+      --text-dim: #9090A8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--black);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 72px;
+      background: rgba(7,7,9,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0,212,212,0.12);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      height: 42px;
+      filter: drop-shadow(0 0 8px rgba(0,212,212,0.4));
+    }
+
+    .nav-logo span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 3px;
+      color: var(--text);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--cyan);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--cyan);
+      color: var(--cyan) !important;
+      padding: 8px 20px;
+      border-radius: 2px;
+      font-family: 'Share Tech Mono', monospace !important;
+      font-size: 11px !important;
+      letter-spacing: 2px !important;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--cyan) !important;
+      color: var(--black) !important;
+    }
+    .nav-cta::after { display: none !important; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 48px 0;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 50%, rgba(123,47,190,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 60%, rgba(0,212,212,0.08) 0%, transparent 60%),
+        linear-gradient(180deg, var(--black) 0%, var(--dark) 100%);
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,212,212,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,212,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .hero-text { }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      padding: 6px 14px;
+      border: 1px solid rgba(0,212,212,0.3);
+      border-radius: 2px;
+      background: rgba(0,212,212,0.05);
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 8vw, 110px);
+      line-height: 0.92;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+
+    .hero-title .line1 { color: var(--text); display: block; }
+    .hero-title .line2 {
+      display: block;
+      background: linear-gradient(90deg, var(--purple-light), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 17px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+
+    .hero-subtitle em {
+      color: var(--cyan);
+      font-style: normal;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+      color: var(--text);
+      border: none;
+      padding: 14px 32px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      text-decoration: none;
+      display: inline-block;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 24px rgba(123,47,190,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(123,47,190,0.5);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(232,232,240,0.2);
+      padding: 14px 32px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .hero-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-logo-wrap {
+      position: relative;
+      width: 340px;
+      height: 340px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-logo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -20px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--cyan), var(--purple), var(--cyan));
+      animation: spin 8s linear infinite;
+      opacity: 0.2;
+      filter: blur(20px);
+    }
+
+    .hero-logo-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,212,212,0.15);
+      animation: spin 12s linear infinite reverse;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .hero-logo {
+      width: 280px;
+      height: 280px;
+      object-fit: contain;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0 0 40px rgba(123,47,190,0.6)) drop-shadow(0 0 80px rgba(0,212,212,0.3));
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .hero-stats {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      background: rgba(0,212,212,0.1);
+      border: 1px solid rgba(0,212,212,0.1);
+      margin-top: 60px;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .stat-item {
+      background: var(--black);
+      padding: 28px 32px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--purple-light), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+    }
+
+    .stat-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 120px 48px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      margin-bottom: 72px;
+    }
+
+    .section-tag {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--cyan);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 5vw, 72px);
+      line-height: 0.95;
+      letter-spacing: 2px;
+    }
+
+    .section-title span {
+      background: linear-gradient(90deg, var(--purple-light), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      margin-top: 20px;
+    }
+
+    /* ── SOBRE ── */
+    #sobre {
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .sobre-text p {
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+    }
+
+    .sobre-text p strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .values-grid {
+      display: grid;
+      gap: 2px;
+      background: rgba(123,47,190,0.1);
+      border: 1px solid rgba(123,47,190,0.2);
+    }
+
+    .value-item {
+      background: var(--dark);
+      padding: 24px 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: background 0.2s;
+    }
+
+    .value-item:hover { background: var(--dark2); }
+
+    .value-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(0,212,212,0.3);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      background: rgba(0,212,212,0.05);
+    }
+
+    .value-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 1px;
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .value-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ── EQUIPE ── */
+    #equipe {
+      background: linear-gradient(180deg, var(--black) 0%, var(--dark) 50%, var(--black) 100%);
+      max-width: 100%;
+      padding: 120px 0;
+    }
+
+    #equipe > * { max-width: 1300px; margin-left: auto; margin-right: auto; padding: 0 48px; }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 2px;
+      background: rgba(0,0,0,0.5);
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 48px !important;
+    }
+
+    .member-card {
+      background: var(--dark);
+      padding: 32px 24px;
+      text-align: center;
+      transition: background 0.2s, transform 0.2s;
+      cursor: default;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .member-card:hover {
+      background: var(--dark2);
+      border-bottom-color: var(--purple);
+      transform: translateY(-4px);
+    }
+
+    .member-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+      border: 2px solid rgba(0,212,212,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--text);
+      margin: 0 auto 16px;
+    }
+
+    .member-name {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .member-role {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+
+    .role-prog { color: var(--cyan); background: rgba(0,212,212,0.1); border: 1px solid rgba(0,212,212,0.2); }
+    .role-mec { color: var(--purple-light); background: rgba(123,47,190,0.1); border: 1px solid rgba(123,47,190,0.2); }
+    .role-out { color: #F0A500; background: rgba(240,165,0,0.1); border: 1px solid rgba(240,165,0,0.2); }
+    .role-lider { color: var(--cyan); background: rgba(0,212,212,0.15); border: 1px solid var(--cyan); }
+
+    .member-badge {
+      display: block;
+      margin-top: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      color: var(--cyan);
+      letter-spacing: 1px;
+    }
+
+    /* ── ROBO ── */
+    #robo { border-top: 1px solid rgba(255,255,255,0.04); }
+
+    .robo-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .feature-list { display: grid; gap: 2px; }
+
+    .feature-item {
+      background: var(--dark);
+      padding: 20px 24px;
+      border-left: 3px solid var(--purple);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .feature-item:hover {
+      border-left-color: var(--cyan);
+      background: var(--dark2);
+    }
+
+    .feature-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      text-transform: uppercase;
+    }
+
+    .feature-value {
+      font-size: 16px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .robo-visual-wrap {
+      background: var(--dark);
+      border: 1px solid rgba(0,212,212,0.12);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .version-tabs {
+      display: flex;
+      gap: 2px;
+      background: var(--black);
+      padding: 4px;
+    }
+
+    .vtab {
+      flex: 1;
+      padding: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-dim);
+      background: transparent;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .vtab.active {
+      background: var(--purple);
+      color: var(--text);
+    }
+
+    .version-content { display: none; }
+    .version-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .version-content p {
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .version-content .pro { color: #4ADE80; }
+    .version-content .con { color: #F87171; }
+    .version-content strong { color: var(--text); }
+
+    /* ── OUTREACH ── */
+    #outreach { border-top: 1px solid rgba(255,255,255,0.04); }
+
+    .outreach-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: rgba(0,0,0,0.3);
+      margin-bottom: 60px;
+    }
+
+    .outreach-card {
+      background: var(--dark);
+      padding: 36px 28px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .outreach-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .outreach-card:hover { background: var(--dark2); }
+    .outreach-card:hover::before { transform: scaleX(1); }
+
+    .outreach-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--purple-light), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .outreach-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .outreach-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ── CONEXOES ── */
+    #conexoes { border-top: 1px solid rgba(255,255,255,0.04); }
+
+    .conexoes-list { display: grid; gap: 2px; }
+
+    .conexao-item {
+      background: var(--dark);
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: start;
+      transition: background 0.2s;
+    }
+
+    .conexao-item:hover { background: var(--dark2); }
+
+    .conexao-badge {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--black);
+      background: var(--cyan);
+      padding: 4px 10px;
+      border-radius: 2px;
+      white-space: nowrap;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .conexao-title {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--text);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .conexao-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* ── METAS ── */
+    #metas { border-top: 1px solid rgba(255,255,255,0.04); }
+
+    .metas-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .meta-col {
+      background: var(--dark);
+      padding: 40px 32px;
+    }
+
+    .meta-col-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(0,212,212,0.15);
+    }
+
+    .meta-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+
+    .meta-star {
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .meta-text {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    .meta-text strong { color: var(--text); }
+
+    /* ── PATROCINADOR ── */
+    #patrocinador {
+      border-top: 1px solid rgba(255,255,255,0.04);
+      text-align: center;
+    }
+
+    .sponsor-box {
+      background: linear-gradient(135deg, rgba(123,47,190,0.12), rgba(0,212,212,0.06));
+      border: 1px solid rgba(123,47,190,0.3);
+      padding: 80px 60px;
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sponsor-box::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(123,47,190,0.05) 60deg, transparent 120deg);
+      animation: spin 20s linear infinite;
+    }
+
+    .sponsor-box > * { position: relative; z-index: 1; }
+
+    .sponsor-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      line-height: 1;
+    }
+
+    .sponsor-title span {
+      background: linear-gradient(90deg, var(--purple-light), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sponsor-text {
+      font-size: 17px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto 40px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 60px 48px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo img { height: 32px; opacity: 0.8; }
+
+    .footer-logo span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+    }
+
+    .footer-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      opacity: 0.5;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .footer-links a {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--cyan); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+
+      #hero { padding: 80px 24px 0; }
+      .hero-content { grid-template-columns: 1fr; gap: 40px; }
+      .hero-visual { order: -1; }
+      .hero-logo-wrap { width: 220px; height: 220px; }
+      .hero-logo { width: 180px; height: 180px; }
+      .hero-stats { grid-template-columns: 1fr; }
+
+      section { padding: 80px 24px; }
+      .sobre-grid, .robo-content { grid-template-columns: 1fr; gap: 40px; }
+      .outreach-grid, .metas-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); padding: 0 24px !important; }
+      footer { padding: 40px 24px; flex-direction: column; align-items: flex-start; }
+    }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* scroll cue */
+    .scroll-cue {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-dim);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: fadeInUp 2s ease 1s both;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(180deg, transparent, var(--cyan));
+      animation: lineGrow 2s ease infinite;
+    }
+
+    @keyframes lineGrow {
+      0% { height: 0; opacity: 0; }
+      50% { height: 40px; opacity: 1; }
+      100% { height: 40px; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-logo">
+      <img src="logo-icon.png" alt="Lösungsjäger logo" />
+      <span>Lösungsjäger</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#equipe">Equipe</a></li>
+      <li><a href="#robo">Robô</a></li>
+      <li><a href="#outreach">Outreach</a></li>
+      <li><a href="#conexoes">Conexões</a></li>
+      <li><a href="#patrocinador" class="nav-cta">Patrocinar</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div id="hero" style="display:flex;flex-direction:column;align-items:center;">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-tag">FTC #21342 · Porto Alegre, RS</div>
+        <h1 class="hero-title">
+          <span class="line1">LÖSUNGS</span>
+          <span class="line2">JÄGER</span>
+        </h1>
+        <p class="hero-subtitle">
+          Os <em>Caçadores de Soluções</em> — uma equipe de robótica do Colégio Farroupilha movida por curiosidade, paixão e a busca incansável por soluções criativas.
+        </p>
+        <div class="hero-btns">
+          <a href="#robo" class="btn-primary">Nosso Robô</a>
+          <a href="#sobre" class="btn-secondary">Conheça a Equipe</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-logo-wrap">
+          <img src="logo-icon.png" alt="Lösungsjäger" class="hero-logo" />
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-stats reveal" style="margin-top:60px;">
+      <div class="stat-item">
+        <span class="stat-number">2022</span>
+        <span class="stat-label">Fundação da Equipe</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">3000+</span>
+        <span class="stat-label">Pessoas Impactadas</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">240h</span>
+        <span class="stat-label">Voluntariado</span>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <div class="scroll-line"></div>
+      scroll
+    </div>
+  </div>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="section-header reveal">
+      <span class="section-tag">// 01 — Sobre</span>
+      <h2 class="section-title">Quem <span>Somos</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="sobre-grid">
+      <div class="sobre-text reveal">
+        <p>
+          A <strong>Lösungsjäger #21342</strong> foi criada no final de 2022 no Colégio Farroupilha de Porto Alegre, RS. O nome, em alemão, significa <strong>"caçadores de soluções"</strong> — uma escolha que reflete tanto a filosofia da equipe quanto a história do colégio, entrelaçada com a imigração alemã no Sul do Brasil.
+        </p>
+        <p>
+          Somos uma equipe composta por <strong>5 veteranos, 4 júniores e 3 calouros</strong>, unidos pela paixão por robótica, tecnologia e impacto social. Participamos da <strong>FIRST Tech Challenge (FTC)</strong>, competição voltada para alunos de 14 a 18 anos, que desafia jovens a projetar, construir e programar robôs do zero.
+        </p>
+        <p>
+          Nossa <strong>missão</strong> é sonhar com um futuro onde usamos ciência e tecnologia para impulsionar os limites da condição humana, por meio da promoção da curiosidade, paixão e crescimento.
+        </p>
+        <div style="margin-top:32px;">
+          <a href="https://www.instagram.com/losungsjager" target="_blank" class="btn-primary" style="margin-right:12px;">@losungsjager</a>
+          <a href="mailto:losungsjager@gmail.com" class="btn-secondary">Contato</a>
+        </div>
+      </div>
+      <div class="values-grid reveal">
+        <div class="value-item">
+          <div class="value-icon">🤝</div>
+          <div>
+            <span class="value-title">Trabalho em Equipe</span>
+            <p class="value-desc">Cada conquista é resultado da colaboração e confiança mútua entre todos os membros.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-icon">🎯</div>
+          <div>
+            <span class="value-title">Busca pela Excelência</span>
+            <p class="value-desc">Iteramos, testamos e melhoramos continuamente — sem aceitar o "bom o suficiente".</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-icon">🌱</div>
+          <div>
+            <span class="value-title">Sustentabilidade</span>
+            <p class="value-desc">Comprometidos com soluções que respeitam o planeta e promovem inclusão social.</p>
+          </div>
+        </div>
+        <div class="value-item">
+          <div class="value-icon">⚙️</div>
+          <div>
+            <span class="value-title">Disciplina & Organização</span>
+            <p class="value-desc">FTemP, metas e reflexões guiam cada encontro com foco e propósito.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPE -->
+  <div id="equipe" style="padding:120px 0; border-top:1px solid rgba(255,255,255,0.04);">
+    <div style="max-width:1300px;margin:0 auto;padding:0 48px;">
+      <div class="section-header reveal">
+        <span class="section-tag">// 02 — Membros</span>
+        <h2 class="section-title">Nossa <span>Equipe</span></h2>
+        <div class="section-divider"></div>
+      </div>
+    </div>
+    <div class="team-grid reveal">
+      <div class="member-card">
+        <div class="member-avatar">MS</div>
+        <span class="member-name">Manuela S.</span>
+        <span class="member-role role-lider">Líder</span>
+        <span class="member-badge">Programação · 17 anos</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">H</div>
+        <span class="member-name">Hans</span>
+        <span class="member-role role-lider">Vice-Líder</span>
+        <span class="member-badge">Programação · 15 anos</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">P</div>
+        <span class="member-name">Priscila</span>
+        <span class="member-role role-prog">Programação</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">A</div>
+        <span class="member-name">Ana Carolina</span>
+        <span class="member-role role-mec">Mecânica</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">B</div>
+        <span class="member-name">Bruno</span>
+        <span class="member-role role-mec">Mecânica</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">E</div>
+        <span class="member-name">Eduardo</span>
+        <span class="member-role role-mec">Mecânica</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">MM</div>
+        <span class="member-name">Manuela M.</span>
+        <span class="member-role role-mec">Mecânica</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">Ar</div>
+        <span class="member-name">Arthur</span>
+        <span class="member-role role-out">Outreach</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">Gi</div>
+        <span class="member-name">Giovanna</span>
+        <span class="member-role role-out">Outreach</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">Ju</div>
+        <span class="member-name">Julia</span>
+        <span class="member-role role-out">Outreach</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">L</div>
+        <span class="member-name">Laura</span>
+        <span class="member-role role-out">Outreach</span>
+      </div>
+      <div class="member-card">
+        <div class="member-avatar">G</div>
+        <span class="member-name">Gabriel</span>
+        <span class="member-role role-out">Outreach</span>
+      </div>
+    </div>
+    <div style="max-width:1300px;margin:40px auto 0;padding:0 48px; display:flex;gap:24px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-dim);">
+        <span style="width:12px;height:12px;background:rgba(0,212,212,0.3);border:1px solid var(--cyan);border-radius:2px;display:inline-block;"></span> PROGRAMAÇÃO
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-dim);">
+        <span style="width:12px;height:12px;background:rgba(123,47,190,0.3);border:1px solid var(--purple-light);border-radius:2px;display:inline-block;"></span> MECÂNICA
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-dim);">
+        <span style="width:12px;height:12px;background:rgba(240,165,0,0.2);border:1px solid #F0A500;border-radius:2px;display:inline-block;"></span> OUTREACH
+      </div>
+    </div>
+  </div>
+
+  <!-- ROBO -->
+  <section id="robo">
+    <div class="section-header reveal">
+      <span class="section-tag">// 03 — Processo de Engenharia</span>
+      <h2 class="section-title">Nosso <span>Robô</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="robo-content">
+      <div class="feature-list reveal">
+        <div class="feature-item">
+          <span class="feature-label">Temporada</span>
+          <span class="feature-value">DECODE 2026</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-label">Chassi</span>
+          <span class="feature-value">Rodas Mecanum (Omni-direcional)</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-label">Plataforma</span>
+          <span class="feature-value">Android Studio + SDK FIRST</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-label">Navegação</span>
+          <span class="feature-value">Field-Centric com IMU BHI260</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-label">Visão</span>
+          <span class="feature-value">VisionPortal + AprilTags</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-label">Alinhamento</span>
+          <span class="feature-value">Controle PD automático</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-label">Mecanismo</span>
+          <span class="feature-value">Captador de elásticos + Lançador dupla roda</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-label">Estrutura</span>
+          <span class="feature-value">"Gaiola" em aço + MDF (estilo Off-Road ATV)</span>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="robo-visual-wrap">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--cyan);margin-bottom:16px;">EVOLUÇÃO DO "CAPTADOR"</div>
+          <div class="version-tabs">
+            <button class="vtab active" onclick="showVersion(this,'v1')">V1</button>
+            <button class="vtab" onclick="showVersion(this,'v2')">V2</button>
+            <button class="vtab" onclick="showVersion(this,'v3')">V3</button>
+          </div>
+          <div id="v1" class="version-content active">
+            <p style="margin-top:16px;"><strong>Tubo giratório acoplado a duas engrenagens.</strong></p>
+            <p><span class="pro">✓ Positivo:</span> Sistema simples e leve com boa lógica inicial de atrito.</p>
+            <p><span class="con">✗ Negativo:</span> Pouca estabilidade e precisão — o Artifact escapava com frequência.</p>
+          </div>
+          <div id="v2" class="version-content">
+            <p style="margin-top:16px;"><strong>Duas engrenagens conectadas por elásticos.</strong></p>
+            <p><span class="pro">✓ Positivo:</span> Contato constante com o Artifact e melhor captura.</p>
+            <p><span class="con">✗ Negativo:</span> "Ponto cego" nos cantos — os Artifacts travavam e precisavam ser removidos manualmente.</p>
+          </div>
+          <div id="v3" class="version-content">
+            <p style="margin-top:16px;"><strong>Sistema quadruplo de engrenagens com elásticos + ângulo em acrílico.</strong></p>
+            <p><span class="pro">✓ Positivo:</span> Movimento linear perfeito do Artifact até o lançador. Coleta confiável, eficiente e consistente nas partidas.</p>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;background:var(--dark);border:1px solid rgba(0,212,212,0.12);padding:32px;">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--cyan);margin-bottom:16px;">ESTRATÉGIA DE JOGO</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;background:rgba(0,0,0,0.3);">
+            <div style="background:var(--dark2);padding:16px;text-align:center;">
+              <div style="font-family:'Bebas Neue';font-size:18px;color:var(--text);letter-spacing:1px;margin-bottom:8px;">AUTÔNOMO</div>
+              <p style="font-size:12px;color:var(--text-dim);line-height:1.6;">Lançamento da área <strong style="color:var(--text)">mais distante</strong> — estratégia diferenciada</p>
+            </div>
+            <div style="background:var(--dark2);padding:16px;text-align:center;">
+              <div style="font-family:'Bebas Neue';font-size:18px;color:var(--text);letter-spacing:1px;margin-bottom:8px;">TELE-OP</div>
+              <p style="font-size:12px;color:var(--text-dim);line-height:1.6;">Postura <strong style="color:var(--text)">defensiva</strong> e controle de campo</p>
+            </div>
+            <div style="background:var(--dark2);padding:16px;text-align:center;">
+              <div style="font-family:'Bebas Neue';font-size:18px;color:var(--text);letter-spacing:1px;margin-bottom:8px;">END GAME</div>
+              <p style="font-size:12px;color:var(--text-dim);line-height:1.6;">Posicionamento <strong style="color:var(--text)">estratégico</strong> da aliança</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUTREACH -->
+  <section id="outreach" style="background:linear-gradient(180deg,var(--black) 0%,var(--dark) 100%);max-width:100%;padding:120px 0;">
+    <div style="max-width:1300px;margin:0 auto;padding:0 48px;">
+      <div class="section-header reveal">
+        <span class="section-tag">// 04 — Impacto Social</span>
+        <h2 class="section-title">Projeto <span>Voluntaria+</span></h2>
+        <div class="section-divider"></div>
+        <p style="margin-top:24px;font-size:17px;color:var(--text-dim);max-width:680px;line-height:1.7;">
+          Aplicamos o mesmo processo de engenharia do FTC para identificar problemas sociais, planejar ações e gerar impacto sustentável na nossa comunidade.
+        </p>
+      </div>
+      <div class="outreach-grid reveal">
+        <div class="outreach-card">
+          <span class="outreach-number">20</span>
+          <span class="outreach-label">ONGs Cadastradas</span>
+          <p class="outreach-desc">O Programa Voluntaria+ conectou nossa equipe com 20 organizações do terceiro setor, ampliando o alcance do impacto social.</p>
+        </div>
+        <div class="outreach-card">
+          <span class="outreach-number">240h</span>
+          <span class="outreach-label">Horas de Voluntariado</span>
+          <p class="outreach-desc">Nossa equipe dedicou mais de 240 horas ao serviço comunitário ao longo da temporada, unindo tecnologia e empatia.</p>
+        </div>
+        <div class="outreach-card">
+          <span class="outreach-number">3000</span>
+          <span class="outreach-label">Pessoas Alcançadas</span>
+          <p class="outreach-desc">Entre demonstrações, eventos, mídias sociais e ações comunitárias, alcançamos mais de 3000 pessoas.</p>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:rgba(0,0,0,0.3);margin-bottom:40px;" class="reveal">
+        <div style="background:var(--dark);padding:40px 36px;">
+          <div style="font-family:'Bebas Neue';font-size:72px;color:var(--purple-light);line-height:1;">105%</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-dim);margin-bottom:16px;text-transform:uppercase;">Meta ACERGS superada</div>
+          <p style="font-size:15px;color:var(--text-dim);line-height:1.7;">A ACERGS superou a meta de R$6.000,00 para aquisição de um móvel para impressora braile — aplicando pensamento de engenharia para apoiar inclusão social.</p>
+        </div>
+        <div style="background:var(--dark);padding:40px 36px;">
+          <div style="font-family:'Bebas Neue';font-size:72px;color:var(--cyan);line-height:1;">+320</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-dim);margin-bottom:16px;text-transform:uppercase;">Vidas salvas</div>
+          <p style="font-size:15px;color:var(--text-dim);line-height:1.7;">Em colaboração com o Hemocentro de Porto Alegre, estruturamos uma Campanha de Doação de Sangue que mobilizou 80 voluntários.</p>
+        </div>
+      </div>
+
+      <div style="background:var(--dark);border:1px solid rgba(0,212,212,0.12);padding:40px 36px;" class="reveal">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--cyan);margin-bottom:20px;">SEPARADOR DE TAMPINHAS — PROJETO ARDUINO</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;">
+          <div>
+            <p style="font-size:15px;color:var(--text-dim);line-height:1.7;">Sistema automatizado baseado em <strong style="color:var(--text)">Arduino</strong> para triagem de tampas de polietileno por cor — com foco em sustentabilidade e apoio a ações filantrópicas.</p>
+            <p style="font-size:15px;color:var(--text-dim);line-height:1.7;margin-top:12px;">Utiliza o sensor de cor <strong style="color:var(--text)">TCS34725</strong>, escolhido pela precisão e filtro infravermelho embutido.</p>
+          </div>
+          <div style="display:flex;gap:24px;align-items:center;">
+            <div style="text-align:center;">
+              <div style="font-family:'Bebas Neue';font-size:48px;color:var(--cyan);line-height:1;">4×</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;">Mais valor</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-family:'Bebas Neue';font-size:48px;color:var(--purple-light);line-height:1;">100%</div>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;">Sustentável</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONEXOES -->
+  <section id="conexoes">
+    <div class="section-header reveal">
+      <span class="section-tag">// 05 — Networking</span>
+      <h2 class="section-title">Conexões & <span>Parceiros</span></h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="conexoes-list reveal">
+      <div class="conexao-item">
+        <span class="conexao-badge">Virtual</span>
+        <div>
+          <span class="conexao-title">Benderminds #18066 — Dois Irmãos, RS</span>
+          <p class="conexao-desc">Compartilhamos desafios da temporada e analisamos abordagens de design e programação, ampliando nossa visão sobre diferentes soluções.</p>
+        </div>
+      </div>
+      <div class="conexao-item">
+        <span class="conexao-badge">Online</span>
+        <div>
+          <span class="conexao-title">Under Ctrl #14391 — Rio Grande do Sul</span>
+          <p class="conexao-desc">Discussão sobre falhas comuns em mecanismos de coleta e armazenamento que influenciaram ajustes no nosso processo de prototipagem.</p>
+        </div>
+      </div>
+      <div class="conexao-item">
+        <span class="conexao-badge">Palestra</span>
+        <div>
+          <span class="conexao-title">Rafael Lerch — Engenheiro, Mestre pela UFRGS</span>
+          <p class="conexao-desc">Palestra sobre gestão de risco e sua aplicação durante o preparo para competições e para imprevistos no torneio.</p>
+        </div>
+      </div>
+      <div class="conexao-item">
+        <span class="conexao-badge">Virtual</span>
+        <div>
+          <span class="conexao-title">SESI Battech #17742 — Rio Grande do Norte</span>
+          <p class="conexao-desc">Reforçou a importância da colaboração e do "Gracious Professionalism" — crescimento técnico acontece por experiências compartilhadas.</p>
+        </div>
+      </div>
+      <div class="conexao-item">
+        <span class="conexao-badge">Online</span>
+        <div>
+          <span class="conexao-title">Criadores do Amanhã #24529 — Paraíba</span>
+          <p class="conexao-desc">Ferramenta de aprendizagem para membros juniores, que puderam compreender na prática os valores da FIRST®.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METAS -->
+  <section id="metas" style="background:linear-gradient(180deg,var(--black) 0%,var(--dark) 100%);max-width:100%;padding:120px 0;">
+    <div style="max-width:1300px;margin:0 auto;padding:0 48px;">
+      <div class="section-header reveal">
+        <span class="section-tag">// 06 — Objetivos</span>
+        <h2 class="section-title">Metas & <span>Reflexões</span></h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="metas-grid reveal">
+        <div class="meta-col">
+          <span class="meta-col-title">Comunidade</span>
+          <div class="meta-item">
+            <span class="meta-star">★</span>
+            <p class="meta-text"><strong>Programa Voluntaria+</strong> — mais de R$6.000 arrecadados para ACERGS e 13 ONGs inscritas</p>
+          </div>
+          <div class="meta-item">
+            <span class="meta-star" style="color:var(--cyan);">●</span>
+            <p class="meta-text"><strong>Separador de Tampinhas</strong> automático — automação com impacto social real</p>
+          </div>
+        </div>
+        <div class="meta-col">
+          <span class="meta-col-title">Robô</span>
+          <div class="meta-item">
+            <span class="meta-star">★</span>
+            <p class="meta-text">Montar um <strong>robô funcional</strong> até a regional e aprimorá-lo para a fase nacional</p>
+          </div>
+          <div class="meta-item">
+            <span class="meta-star">★</span>
+            <p class="meta-text">Ter um <strong>Tele-Op funcional</strong></p>
+          </div>
+          <div class="meta-item">
+            <span class="meta-star">★</span>
+            <p class="meta-text">Adicionar <strong>novos mecanismos</strong> consolidando um processo iterativo e sustentável</p>
+          </div>
+        </div>
+        <div class="meta-col">
+          <span class="meta-col-title">Equipe</span>
+          <div class="meta-item">
+            <span class="meta-star" style="color:var(--cyan);">●</span>
+            <p class="meta-text">Mentores <strong>ensinarem os novatos</strong> os valores da FIRST®</p>
+          </div>
+          <div class="meta-item">
+            <span class="meta-star" style="color:var(--cyan);">●</span>
+            <p class="meta-text">Busca por <strong>patrocinadores</strong> para custear materiais e viagens</p>
+          </div>
+          <div class="meta-item">
+            <span class="meta-star" style="color:var(--cyan);">●</span>
+            <p class="meta-text"><strong>Conectar-se</strong> com mais equipes regionais, nacionais e internacionais</p>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:24px;flex-wrap:wrap;" class="reveal">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-dim);">★ META CONCLUÍDA</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--cyan);">● META EM ANDAMENTO</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATROCINADOR -->
+  <section id="patrocinador">
+    <div class="sponsor-box reveal">
+      <h2 class="sponsor-title">Seja um <span>Patrocinador</span></h2>
+      <p class="sponsor-text">
+        Ao apoiar a Lösungsjäger, você investe na próxima geração de engenheiros, programadores e líderes. Junte-se a nós nessa missão de transformar ciência e tecnologia em impacto humano real.
+      </p>
+      <a href="mailto:losungsjager@gmail.com" class="btn-primary">Entrar em Contato</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">
+      <div class="footer-logo">
+        <img src="logo-icon.png" alt="logo" />
+        <span>Lösungsjäger #21342</span>
+      </div>
+      <span class="footer-sub">Colégio Farroupilha · Porto Alegre, RS · FTC Team</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://www.instagram.com/losungsjager" target="_blank">Instagram</a>
+      <a href="https://www.tiktok.com/@losungsjager" target="_blank">TikTok</a>
+      <a href="mailto:losungsjager@gmail.com">E-mail</a>
+      <a href="https://sites.google.com/view/lsungsjger-21342/in%C3%ADcio" target="_blank">Site Antigo</a>
+    </div>
+  </footer>
+
+  <script>
+    // Version tabs
+    function showVersion(btn, id) {
+      document.querySelectorAll('.vtab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.version-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(id).classList.add('active');
+    }
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, 100);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // Nav scroll effect
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        nav.style.background = 'rgba(7,7,9,0.97)';
+      } else {
+        nav.style.background = 'rgba(7,7,9,0.88)';
+      }
+    });
+  </script>
+</body>
+</html>
