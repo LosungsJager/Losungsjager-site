@@ -3,1227 +3,1047 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lösungsjäger #21342</title>
+  <title>Lösungsjäger #21342 — FTC Robotics</title>
   <link rel="icon" type="image/png" href="logo-icon.png" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <style>
     :root {
       --purple: #7B2FBE;
-      --cyan: #00C2C2;
-      --black: #111010;
-      --off-white: #F5F3EF;
-      --warm-gray: #E8E4DE;
-      --mid-gray: #999490;
-      --text: #1A1917;
-      --text-light: #6B6860;
+      --purple-light: #9B59D4;
+      --purple-dark: #4A0D8F;
+      --cyan: #00D4D4;
+      --black: #0E0E16;
+      --dark: #14141F;
+      --surface: #1F1F30;
+      --surface2: #272738;
+      --text: #D8D8E8;
+      --text-bright: #EEEEF8;
+      --text-dim: #8888A8;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Barlow',sans-serif; background:var(--black); color:var(--text); overflow-x:hidden; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--off-white);
-      color: var(--text);
-      overflow-x: hidden;
+    /* noise overlay */
+    body::before {
+      content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:.22;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
     }
 
-    /* ── NAV ── */
+    /* ── NAV (neon kept here) ── */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 56px;
-      height: 68px;
-      background: rgba(245,243,239,0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--warm-gray);
+      position:fixed; top:0; left:0; right:0; z-index:1000;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0 48px; height:86px;
+      background:rgba(14,14,22,.94); backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(0,212,212,.18);
+      box-shadow:0 1px 32px rgba(0,212,212,.05);
+      transition:box-shadow .3s;
     }
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
+    .nav-logo { display:flex; align-items:center; gap:14px; text-decoration:none; flex-shrink:0; }
+
+    .nav-logo img {
+      height:48px;
+      filter:drop-shadow(0 0 12px rgba(0,212,212,.45));
     }
 
-    .nav-logo img { height: 34px; }
+    .nav-logo-text { display:flex; flex-direction:column; line-height:1.15; }
 
-    .nav-wordmark {
-      font-family: 'DM Serif Display', serif;
-      font-size: 17px;
-      color: var(--text);
+    .nav-logo-name {
+      font-family:'Bebas Neue',sans-serif; font-size:23px;
+      letter-spacing:3px; color:var(--text-bright);
+      text-shadow:0 0 20px rgba(0,212,212,.38);
     }
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      list-style: none;
+    .nav-logo-tag {
+      font-family:'Share Tech Mono',monospace; font-size:10px;
+      letter-spacing:2px; color:var(--cyan); opacity:.65;
     }
+
+    .nav-links { display:flex; align-items:center; gap:4px; list-style:none; }
 
     .nav-links a {
-      font-size: 13px;
-      color: var(--text-light);
-      text-decoration: none;
-      transition: color 0.2s;
+      font-family:'Share Tech Mono',monospace; font-size:12px;
+      letter-spacing:2px; text-transform:uppercase;
+      color:var(--text-dim); text-decoration:none;
+      padding:10px 14px; border-radius:4px;
+      transition:color .2s, background .2s;
     }
 
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover {
+      color:var(--cyan); background:rgba(0,212,212,.07);
+      text-shadow:0 0 12px rgba(0,212,212,.45);
+    }
 
     .nav-cta {
-      background: var(--purple) !important;
-      color: white !important;
-      padding: 9px 22px;
-      border-radius: 100px;
-      font-size: 13px !important;
-      font-weight: 500 !important;
-      transition: opacity 0.2s !important;
+      border:1px solid var(--cyan) !important;
+      color:var(--cyan) !important;
+      box-shadow:0 0 12px rgba(0,212,212,.14) !important;
+      transition:background .2s, color .2s, box-shadow .2s !important;
     }
 
-    .nav-cta:hover { opacity: 0.85 !important; }
+    .nav-cta:hover {
+      background:var(--cyan) !important; color:var(--black) !important;
+      box-shadow:0 0 28px rgba(0,212,212,.38) !important;
+      text-shadow:none !important;
+    }
 
-    /* ── HERO ── */
+    /* hamburger */
+    .hamburger {
+      display:none; flex-direction:column; gap:6px; cursor:pointer;
+      padding:8px; background:none; border:none; z-index:1100;
+    }
+
+    .hamburger span {
+      display:block; width:26px; height:2px;
+      background:var(--cyan); border-radius:2px;
+      box-shadow:0 0 8px rgba(0,212,212,.55);
+      transition:transform .3s, opacity .3s;
+    }
+
+    .hamburger.open span:nth-child(1) { transform:translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity:0; }
+    .hamburger.open span:nth-child(3) { transform:translateY(-8px) rotate(-45deg); }
+
+    /* mobile drawer */
+    .mob-drawer {
+      display:none; position:fixed;
+      top:86px; left:0; right:0; z-index:998;
+      background:rgba(14,14,22,.98); backdrop-filter:blur(24px);
+      border-bottom:1px solid rgba(0,212,212,.14);
+      padding:16px 24px 28px;
+      flex-direction:column; gap:2px;
+      opacity:0; transform:translateY(-6px);
+      transition:opacity .3s, transform .3s;
+    }
+
+    .mob-drawer.open { display:flex; opacity:1; transform:translateY(0); }
+
+    .mob-drawer a {
+      font-family:'Share Tech Mono',monospace; font-size:14px;
+      letter-spacing:2px; text-transform:uppercase;
+      color:var(--text-dim); text-decoration:none;
+      padding:14px 16px; border-radius:4px;
+      border-left:2px solid transparent;
+      transition:color .2s, background .2s, border-color .2s;
+    }
+
+    .mob-drawer a:hover, .mob-drawer a:active {
+      color:var(--cyan); background:rgba(0,212,212,.06); border-left-color:var(--cyan);
+    }
+
+    .mob-drawer .mob-cta {
+      margin-top:10px; text-align:center;
+      border:1px solid var(--cyan) !important;
+      color:var(--cyan) !important; border-left:1px solid var(--cyan) !important;
+    }
+
+    /* ── HERO (glow effects kept — part of logo aura) ── */
     #hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 420px;
-      align-items: center;
-      padding-top: 68px;
-      max-width: 1300px;
-      margin: 0 auto;
-      padding-left: 56px;
+      min-height:100vh; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      position:relative; overflow:hidden; padding:86px 48px 0;
     }
 
-    .hero-left {
-      padding: 80px 80px 80px 0;
+    .hero-bg {
+      position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 55% 55% at 68% 50%, rgba(123,47,190,.14) 0%, transparent 70%),
+        radial-gradient(ellipse 35% 50% at 22% 58%, rgba(0,212,212,.06) 0%, transparent 60%),
+        linear-gradient(180deg, var(--black) 0%, var(--dark) 100%);
     }
 
-    .hero-eyebrow {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-light);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 32px;
+    .hero-grid-bg {
+      position:absolute; inset:0;
+      background-image:
+        linear-gradient(rgba(0,212,212,.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,212,.028) 1px, transparent 1px);
+      background-size:64px 64px;
+      mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
     }
 
-    .hero-eyebrow::before {
-      content: '';
-      width: 24px;
-      height: 1px;
-      background: var(--cyan);
-      flex-shrink: 0;
+    .hero-inner {
+      position:relative; z-index:2;
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:72px; align-items:center;
+      max-width:1200px; width:100%;
     }
 
-    h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(72px, 7vw, 108px);
-      line-height: 0.95;
-      letter-spacing: -0.02em;
-      margin-bottom: 32px;
+    .hero-tag {
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:'Share Tech Mono',monospace; font-size:11px;
+      letter-spacing:3px; color:var(--cyan); text-transform:uppercase;
+      margin-bottom:24px; padding:7px 14px;
+      border:1px solid rgba(0,212,212,.22); border-radius:3px;
+      background:rgba(0,212,212,.04);
     }
 
-    h1 em { font-style: italic; color: var(--purple); }
+    .hero-tag::before {
+      content:''; width:6px; height:6px; border-radius:50%;
+      background:var(--cyan); animation:blink 2s infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    .hero-title {
+      font-family:'Bebas Neue',sans-serif;
+      font-size:clamp(58px, 8vw, 108px); line-height:.92;
+      letter-spacing:2px; margin-bottom:22px;
+    }
+
+    .hero-title .t1 { color:var(--text-bright); display:block; }
+    .hero-title .t2 {
+      display:block;
+      background:linear-gradient(90deg, var(--purple-light), var(--cyan));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
 
     .hero-desc {
-      font-size: 18px;
-      font-weight: 300;
-      color: var(--text-light);
-      line-height: 1.75;
-      max-width: 460px;
-      margin-bottom: 48px;
+      font-size:17px; color:var(--text-dim); line-height:1.75;
+      max-width:460px; margin-bottom:38px;
     }
 
-    .hero-desc strong { color: var(--text); font-weight: 500; }
+    .hero-desc em { color:var(--text); font-style:normal; font-weight:600; }
 
-    .hero-actions {
-      display: flex;
-      align-items: center;
-      gap: 28px;
+    .hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
+
+    .btn-primary {
+      background:linear-gradient(135deg, var(--purple), var(--purple-dark));
+      color:var(--text-bright); border:none;
+      padding:14px 30px;
+      font-family:'Share Tech Mono',monospace; font-size:12px;
+      letter-spacing:2px; text-transform:uppercase;
+      cursor:pointer; border-radius:3px; text-decoration:none;
+      display:inline-block;
+      box-shadow:0 4px 24px rgba(123,47,190,.25);
+      transition:transform .2s, box-shadow .2s;
     }
 
-    .btn-fill {
-      background: var(--text);
-      color: var(--off-white);
-      padding: 13px 28px;
-      border-radius: 100px;
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: background 0.2s;
+    .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 36px rgba(123,47,190,.4); }
+
+    .btn-secondary {
+      background:transparent; color:var(--text);
+      border:1px solid rgba(216,216,232,.18);
+      padding:14px 30px;
+      font-family:'Share Tech Mono',monospace; font-size:12px;
+      letter-spacing:2px; text-transform:uppercase;
+      cursor:pointer; border-radius:3px; text-decoration:none;
+      display:inline-block; transition:border-color .2s, color .2s;
     }
 
-    .btn-fill:hover { background: var(--purple); }
+    .btn-secondary:hover { border-color:var(--purple-light); color:var(--purple-light); }
 
-    .btn-text {
-      font-size: 14px;
-      color: var(--text-light);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: color 0.2s;
+    /* logo visual */
+    .hero-visual { display:flex; justify-content:center; align-items:center; }
+
+    .logo-wrap {
+      position:relative; width:300px; height:300px;
+      display:flex; align-items:center; justify-content:center;
     }
 
-    .btn-text:hover { color: var(--text); }
-    .btn-text::after { content: '→'; transition: transform 0.2s; }
-    .btn-text:hover::after { transform: translateX(4px); }
-
-    .hero-right {
-      height: 100vh;
-      background: var(--purple);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
+    .logo-wrap::before {
+      content:''; position:absolute; inset:-24px; border-radius:50%;
+      background:conic-gradient(from 0deg, var(--cyan), var(--purple), var(--cyan));
+      animation:spin 8s linear infinite; opacity:.17; filter:blur(22px);
     }
 
-    .hero-right::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(0,194,194,0.2) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 80% 80%, rgba(0,0,0,0.25) 0%, transparent 60%);
+    .logo-wrap::after {
+      content:''; position:absolute; inset:12px; border-radius:50%;
+      border:1px solid rgba(0,212,212,.11);
+      animation:spin 14s linear infinite reverse;
     }
 
-    .hero-logo-img {
-      width: 200px;
-      height: 200px;
-      object-fit: contain;
-      position: relative;
-      z-index: 1;
-      filter: drop-shadow(0 20px 60px rgba(0,0,0,0.35));
-      animation: heroFloat 7s ease-in-out infinite;
+    @keyframes spin { to{transform:rotate(360deg)} }
+
+    .hero-logo {
+      width:248px; height:248px; object-fit:contain;
+      position:relative; z-index:2;
+      filter:drop-shadow(0 0 32px rgba(123,47,190,.5)) drop-shadow(0 0 60px rgba(0,212,212,.2));
+      animation:float 6s ease-in-out infinite;
     }
 
-    @keyframes heroFloat {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-14px); }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+    /* stats bar */
+    .hero-stats {
+      position:relative; z-index:2;
+      display:grid; grid-template-columns:repeat(3,1fr);
+      width:100%; max-width:1200px; margin-top:56px;
+      border:1px solid rgba(216,216,232,.06);
+      background:rgba(216,216,232,.015);
     }
 
-    .hero-right-label {
-      position: absolute;
-      bottom: 48px;
-      left: 0; right: 0;
-      text-align: center;
-      z-index: 1;
+    .stat-item {
+      padding:26px 28px; text-align:center;
+      border-right:1px solid rgba(216,216,232,.06);
     }
 
-    .hero-right-label span {
-      font-family: 'DM Serif Display', serif;
-      font-style: italic;
-      font-size: 13px;
-      color: rgba(255,255,255,0.45);
-    }
-
-    /* STATS BAR */
-    .hero-stats-bar {
-      background: var(--text);
-      color: var(--off-white);
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      max-width: 1300px;
-      margin: 0 auto;
-    }
-
-    .stat-cell {
-      padding: 36px 56px;
-      border-right: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .stat-cell:last-child { border-right: none; }
+    .stat-item:last-child { border-right:none; }
 
     .stat-n {
-      font-family: 'DM Serif Display', serif;
-      font-size: 48px;
-      line-height: 1;
-      color: white;
-      display: block;
-      margin-bottom: 4px;
+      font-family:'Bebas Neue',sans-serif; font-size:48px; line-height:1;
+      background:linear-gradient(135deg, var(--purple-light), var(--cyan));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      display:block;
     }
-
-    .stat-n em { font-style: italic; color: var(--cyan); }
 
     .stat-l {
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      font-family:'Share Tech Mono',monospace; font-size:10px;
+      letter-spacing:2px; color:var(--text-dim); text-transform:uppercase;
+      margin-top:4px; display:block;
     }
 
-    /* ── SECTIONS ── */
-    .section-wrap {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 120px 56px;
+    /* scroll cue */
+    .scroll-cue {
+      position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      font-family:'Share Tech Mono',monospace; font-size:9px;
+      letter-spacing:3px; color:var(--text-dim); text-transform:uppercase;
+      animation:fadeUp 2s ease 1.2s both;
     }
 
-    .section-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 20px;
+    @keyframes fadeUp {
+      from{opacity:0;transform:translateX(-50%) translateY(14px)}
+      to{opacity:1;transform:translateX(-50%) translateY(0)}
     }
 
-    .section-label::after {
-      content: '';
-      width: 48px;
-      height: 1px;
-      background: var(--warm-gray);
+    .scroll-line {
+      width:1px; background:linear-gradient(180deg, transparent, var(--purple-light));
+      animation:scPulse 2s ease infinite;
     }
 
-    h2 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(40px, 4vw, 60px);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 64px;
+    @keyframes scPulse { 0%{height:0;opacity:0} 50%{height:36px;opacity:1} 100%{height:36px;opacity:0} }
+
+    /* ── SECTIONS (no neon glow — clean) ── */
+    section { padding:110px 48px; max-width:1280px; margin:0 auto; }
+
+    .sec-border { border-top:1px solid rgba(216,216,232,.05); }
+
+    .sec-tag {
+      font-family:'Share Tech Mono',monospace; font-size:10px;
+      letter-spacing:4px; color:var(--purple-light);
+      text-transform:uppercase; display:block; margin-bottom:12px;
     }
 
-    h2 em { font-style: italic; color: var(--purple); }
+    .sec-title {
+      font-family:'Bebas Neue',sans-serif; font-size:clamp(42px,5vw,66px);
+      line-height:.95; letter-spacing:2px; color:var(--text-bright); margin-bottom:14px;
+    }
+
+    .sec-title span {
+      background:linear-gradient(90deg, var(--purple-light), var(--cyan));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+
+    .sec-div { width:48px; height:2px; background:linear-gradient(90deg,var(--purple),var(--cyan)); margin-bottom:52px; }
 
     /* ── SOBRE ── */
-    #sobre { border-top: 1px solid var(--warm-gray); }
+    .sobre-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
 
-    .sobre-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 100px;
+    .sobre-text p { font-size:16px; line-height:1.85; color:var(--text-dim); margin-bottom:16px; }
+    .sobre-text p strong { color:var(--text-bright); font-weight:700; }
+
+    .values-stack { display:grid; gap:2px; }
+
+    .val-card {
+      background:var(--surface); padding:20px 24px;
+      display:flex; gap:14px; align-items:flex-start;
+      border-left:3px solid transparent;
+      transition:background .2s, border-color .2s;
     }
 
-    .sobre-text p {
-      font-size: 17px;
-      font-weight: 300;
-      line-height: 1.85;
-      color: var(--text-light);
-      margin-bottom: 20px;
+    .val-card:hover { background:var(--surface2); border-left-color:var(--purple-light); }
+
+    .val-icon {
+      width:32px; height:32px; flex-shrink:0;
+      background:rgba(123,47,190,.1); border:1px solid rgba(123,47,190,.22);
+      border-radius:3px; display:flex; align-items:center; justify-content:center; font-size:14px;
     }
 
-    .sobre-text p strong { color: var(--text); font-weight: 500; }
-
-    .sobre-links {
-      display: flex;
-      gap: 16px;
-      margin-top: 40px;
-      flex-wrap: wrap;
+    .val-name {
+      font-family:'Bebas Neue',sans-serif; font-size:18px;
+      letter-spacing:1px; color:var(--text-bright); display:block; margin-bottom:4px;
     }
 
-    .values-stack {
-      border-top: 1px solid var(--warm-gray);
-    }
-
-    .value-row {
-      display: flex;
-      gap: 24px;
-      padding: 28px 0;
-      border-bottom: 1px solid var(--warm-gray);
-      transition: padding-left 0.3s;
-    }
-
-    .value-row:hover { padding-left: 8px; }
-
-    .value-num {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      color: var(--mid-gray);
-      margin-top: 4px;
-      flex-shrink: 0;
-      width: 24px;
-    }
-
-    .value-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 20px;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .value-desc {
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--text-light);
-      line-height: 1.6;
-    }
+    .val-desc { font-size:13px; color:var(--text-dim); line-height:1.6; }
 
     /* ── EQUIPE ── */
-    #equipe { background: var(--text); }
+    #equipe { max-width:100%; padding:110px 0; border-top:1px solid rgba(216,216,232,.05); }
 
-    #equipe h2 { color: var(--off-white); }
-    #equipe h2 em { color: var(--cyan); }
-    #equipe .section-label { color: var(--cyan); }
-    #equipe .section-label::after { background: rgba(255,255,255,0.1); }
+    .eq-header { max-width:1280px; margin:0 auto; padding:0 48px 48px; }
 
-    .equipe-intro {
-      font-size: 16px;
-      font-weight: 300;
-      color: rgba(245,243,239,0.5);
-      max-width: 500px;
-      line-height: 1.7;
-      margin-bottom: 64px;
-      margin-top: -44px;
+    .team-grid {
+      max-width:1280px; margin:0 auto; padding:0 48px;
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(185px,1fr)); gap:2px;
     }
 
-    .members-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-top: 1px solid rgba(255,255,255,0.08);
+    .mem-card {
+      background:var(--surface); padding:26px 18px; text-align:center;
+      border-bottom:2px solid transparent;
+      transition:background .25s, border-color .25s, transform .25s;
     }
 
-    .member-card {
-      padding: 32px 24px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      border-right: 1px solid rgba(255,255,255,0.08);
-      transition: background 0.2s;
+    .mem-card:hover { background:var(--surface2); border-bottom-color:var(--purple); transform:translateY(-4px); }
+
+    .mem-av {
+      width:62px; height:62px; border-radius:50%;
+      background:linear-gradient(135deg, var(--purple-dark), var(--purple));
+      border:2px solid rgba(155,89,212,.28);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Bebas Neue',sans-serif; font-size:22px;
+      color:var(--text-bright); margin:0 auto 13px;
     }
 
-    .member-card:hover { background: rgba(255,255,255,0.04); }
-    .member-card:nth-child(4n) { border-right: none; }
+    .mem-name { font-weight:700; font-size:15px; color:var(--text-bright); display:block; margin-bottom:7px; }
 
-    .member-initial {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'DM Serif Display', serif;
-      font-size: 20px;
-      color: var(--off-white);
-      margin-bottom: 16px;
+    .mem-role {
+      font-family:'Share Tech Mono',monospace; font-size:9px;
+      letter-spacing:2px; text-transform:uppercase;
+      display:inline-block; padding:3px 9px; border-radius:2px;
     }
 
-    .initial-prog { background: rgba(0,194,194,0.2); border: 1px solid rgba(0,194,194,0.35); }
-    .initial-mec  { background: rgba(123,47,190,0.3); border: 1px solid rgba(123,47,190,0.5); }
-    .initial-out  { background: rgba(200,140,50,0.2); border: 1px solid rgba(200,140,50,0.35); }
-    .initial-lid  { background: var(--purple); border: 1px solid rgba(0,194,194,0.5); }
+    .r-prog  { color:#5DD8D8; background:rgba(93,216,216,.07);  border:1px solid rgba(93,216,216,.2); }
+    .r-mec   { color:#B07FE0; background:rgba(176,127,224,.07); border:1px solid rgba(176,127,224,.2); }
+    .r-out   { color:#D4A84B; background:rgba(212,168,75,.07);  border:1px solid rgba(212,168,75,.2); }
+    .r-lider { color:#5DD8D8; background:rgba(93,216,216,.11);  border:1px solid rgba(93,216,216,.35); }
 
-    .member-name {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--off-white);
-      display: block;
-      margin-bottom: 4px;
+    .mem-extra {
+      display:block; margin-top:6px;
+      font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--text-dim); letter-spacing:1px;
     }
 
-    .member-role {
-      font-size: 11px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+    .team-legend {
+      max-width:1280px; margin:24px auto 0; padding:0 48px;
+      display:flex; gap:24px; flex-wrap:wrap;
     }
 
-    .role-prog { color: var(--cyan); }
-    .role-mec  { color: rgba(180,140,230,0.85); }
-    .role-out  { color: rgba(220,170,80,0.85); }
-    .role-lid  { color: var(--cyan); }
-
-    .member-tag {
-      display: inline-block;
-      margin-top: 8px;
-      font-size: 10px;
-      background: rgba(0,194,194,0.12);
-      color: var(--cyan);
-      padding: 2px 8px;
-      border-radius: 100px;
+    .leg {
+      display:inline-flex; align-items:center; gap:7px;
+      font-family:'Share Tech Mono',monospace; font-size:9px;
+      letter-spacing:2px; color:var(--text-dim); text-transform:uppercase;
     }
 
-    .role-legend {
-      display: flex;
-      gap: 32px;
-      margin-top: 40px;
-      padding-top: 32px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      flex-wrap: wrap;
+    .leg::before {
+      content:''; width:9px; height:9px; border-radius:2px; display:inline-block;
     }
 
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: rgba(245,243,239,0.4);
-    }
+    .leg-prog::before { background:rgba(93,216,216,.45); border:1px solid #5DD8D8; }
+    .leg-mec::before  { background:rgba(176,127,224,.45); border:1px solid #B07FE0; }
+    .leg-out::before  { background:rgba(212,168,75,.45);  border:1px solid #D4A84B; }
 
-    .legend-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-    }
+    /* ── ROBÔ ── */
+    .robo-grid { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; }
 
-    /* ── ROBO ── */
-    #robo { border-top: 1px solid var(--warm-gray); }
-
-    .robo-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 100px;
-    }
-
-    .specs-list {
-      border-top: 1px solid var(--warm-gray);
-      margin-bottom: 48px;
-    }
+    .specs-list { display:grid; gap:2px; margin-bottom:20px; }
 
     .spec-row {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 24px;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--warm-gray);
-      align-items: baseline;
+      background:var(--surface); padding:13px 18px;
+      display:grid; grid-template-columns:130px 1fr; gap:14px; align-items:center;
+      transition:background .2s;
     }
 
-    .spec-key {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--mid-gray);
+    .spec-row:hover { background:var(--surface2); }
+
+    .spec-k {
+      font-family:'Share Tech Mono',monospace; font-size:9px;
+      letter-spacing:2px; color:var(--purple-light); text-transform:uppercase;
     }
 
-    .spec-val {
-      font-size: 15px;
-      color: var(--text);
-      line-height: 1.5;
+    .spec-v { font-size:14px; color:var(--text); font-weight:600; }
+
+    .strat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
+
+    .strat-cell {
+      background:var(--surface); padding:18px 14px; text-align:center;
+      transition:background .2s;
     }
 
-    .estrategia-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      background: var(--warm-gray);
+    .strat-cell:hover { background:var(--surface2); }
+
+    .strat-lbl {
+      font-family:'Share Tech Mono',monospace; font-size:9px;
+      letter-spacing:2px; color:var(--purple-light); text-transform:uppercase;
+      display:block; margin-bottom:5px;
     }
 
-    .estrat-cell {
-      background: white;
-      padding: 24px 20px;
+    .strat-t {
+      font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:1px;
+      color:var(--text-bright); display:block; margin-bottom:5px;
     }
 
-    .estrat-label {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      display: block;
-      margin-bottom: 8px;
+    .strat-d { font-size:12px; color:var(--text-dim); line-height:1.6; }
+
+    .ver-panel { background:var(--surface); padding:26px; margin-bottom:20px; }
+
+    .vtabs { display:flex; gap:2px; margin-bottom:18px; }
+
+    .vtab {
+      flex:1; padding:10px 8px;
+      font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:1px;
+      text-align:center; cursor:pointer;
+      color:var(--text-dim); background:rgba(0,0,0,.25); border:none;
+      border-bottom:2px solid transparent; transition:all .2s;
     }
 
-    .estrat-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 18px;
-      display: block;
-      margin-bottom: 8px;
-    }
+    .vtab.active { color:var(--text-bright); background:var(--surface2); border-bottom-color:var(--purple-light); }
 
-    .estrat-text {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--text-light);
-      line-height: 1.6;
-    }
+    .vcont { display:none; }
+    .vcont.active { display:block; animation:fup .3s ease; }
 
-    .evolucao { display: flex; flex-direction: column; gap: 2px; margin-bottom: 24px; }
+    @keyframes fup { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
 
-    .version-btn {
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-      padding: 20px 20px 20px 24px;
-      background: white;
-      border: none;
-      border-left: 3px solid transparent;
-      cursor: pointer;
-      text-align: left;
-      transition: border-left-color 0.2s;
-      width: 100%;
-    }
-
-    .version-btn.active { border-left-color: var(--purple); }
-
-    .vbtn-num {
-      font-family: 'DM Serif Display', serif;
-      font-style: italic;
-      font-size: 28px;
-      color: var(--warm-gray);
-      line-height: 1;
-      flex-shrink: 0;
-      transition: color 0.2s;
-    }
-
-    .version-btn.active .vbtn-num,
-    .version-btn:hover .vbtn-num { color: var(--purple); }
-
-    .vbtn-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text);
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .vbtn-desc {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--text-light);
-      line-height: 1.6;
-      display: none;
-    }
-
-    .version-btn.active .vbtn-desc { display: block; }
+    .vcont p { font-size:14px; color:var(--text-dim); line-height:1.75; margin-bottom:8px; }
+    .vcont strong { color:var(--text); }
+    .vp { color:#6FD08A; } .vc { color:#E07070; }
 
     /* ── OUTREACH ── */
-    #outreach { background: var(--warm-gray); max-width: 100%; padding: 0; }
-
-    .numbers-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: rgba(0,0,0,0.07);
-      margin-bottom: 2px;
+    #outreach {
+      max-width:100%; padding:110px 0;
+      background:var(--dark);
+      border-top:1px solid rgba(216,216,232,.05);
+      border-bottom:1px solid rgba(216,216,232,.05);
     }
 
-    .number-cell {
-      background: var(--warm-gray);
-      padding: 48px 40px;
+    .out-inner { max-width:1280px; margin:0 auto; padding:0 48px; }
+
+    .nums-row { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; margin-bottom:40px; }
+
+    .num-cell {
+      background:var(--surface); padding:34px 26px; position:relative; overflow:hidden;
+      transition:background .25s;
     }
 
-    .number-big {
-      font-family: 'DM Serif Display', serif;
-      font-size: 72px;
-      line-height: 1;
-      color: var(--text);
-      display: block;
-      margin-bottom: 4px;
+    .num-cell::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg, var(--purple), var(--cyan));
+      transform:scaleX(0); transform-origin:left; transition:transform .3s;
     }
 
-    .number-big em { font-style: italic; color: var(--purple); }
+    .num-cell:hover { background:var(--surface2); }
+    .num-cell:hover::before { transform:scaleX(1); }
 
-    .number-label {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      display: block;
-      margin-bottom: 12px;
+    .num-big {
+      font-family:'Bebas Neue',sans-serif; font-size:62px; line-height:1;
+      background:linear-gradient(135deg, var(--purple-light), var(--cyan));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      display:block; margin-bottom:5px;
     }
 
-    .number-desc {
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--text-light);
-      line-height: 1.65;
+    .num-lbl {
+      font-family:'Share Tech Mono',monospace; font-size:9px;
+      letter-spacing:3px; color:var(--text-dim); text-transform:uppercase;
+      display:block; margin-bottom:10px;
     }
 
-    .outreach-split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: rgba(0,0,0,0.07);
-      margin-bottom: 2px;
+    .num-desc { font-size:13px; color:var(--text-dim); line-height:1.65; }
+
+    .impact-row { display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-bottom:24px; }
+
+    .impact-cell { background:var(--surface); padding:34px 30px; }
+
+    .impact-n {
+      font-family:'Bebas Neue',sans-serif; font-size:58px; line-height:1;
+      color:var(--purple-light); display:block; margin-bottom:6px;
     }
 
-    .outreach-block {
-      background: var(--warm-gray);
-      padding: 48px 40px;
+    .impact-lbl {
+      font-family:'Share Tech Mono',monospace; font-size:9px;
+      letter-spacing:3px; color:var(--text-dim); text-transform:uppercase;
+      display:block; margin-bottom:12px;
     }
 
-    .outreach-block-num {
-      font-family: 'DM Serif Display', serif;
-      font-size: 56px;
-      line-height: 1;
-      color: var(--purple);
-      font-style: italic;
-      display: block;
-      margin-bottom: 8px;
+    .impact-cell p { font-size:14px; color:var(--text-dim); line-height:1.75; }
+    .impact-cell p strong { color:var(--text); }
+
+    .ard-card { background:var(--surface); padding:32px 28px; }
+
+    .ard-tag {
+      font-family:'Share Tech Mono',monospace; font-size:9px;
+      letter-spacing:3px; color:var(--purple-light); text-transform:uppercase;
+      display:block; margin-bottom:18px;
     }
 
-    .outreach-block-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      display: block;
-      margin-bottom: 16px;
+    .ard-inner { display:grid; grid-template-columns:1fr auto; gap:40px; align-items:center; }
+    .ard-inner p { font-size:15px; color:var(--text-dim); line-height:1.8; }
+    .ard-inner p strong { color:var(--text); }
+
+    .ard-stats { display:flex; gap:36px; flex-shrink:0; }
+
+    .ard-s { text-align:center; }
+
+    .ard-s-n {
+      font-family:'Bebas Neue',sans-serif; font-size:44px; line-height:1; display:block;
     }
 
-    .outreach-block p {
-      font-size: 15px;
-      font-weight: 300;
-      color: var(--text-light);
-      line-height: 1.75;
+    .ard-s-n.p { color:var(--purple-light); }
+    .ard-s-n.c { color:var(--cyan); }
+
+    .ard-s-l {
+      font-family:'Share Tech Mono',monospace; font-size:9px;
+      letter-spacing:2px; color:var(--text-dim); text-transform:uppercase;
+      display:block; margin-top:4px;
     }
 
-    .outreach-block p strong { color: var(--text); font-weight: 500; }
+    /* ── CONEXÕES ── */
+    .cx-list { display:grid; gap:2px; }
 
-    /* ── CONEXOES ── */
-    #conexoes { border-top: 1px solid var(--warm-gray); }
-
-    .conexoes-list {
-      border-top: 1px solid var(--warm-gray);
+    .cx-row {
+      background:var(--surface); padding:22px 26px;
+      display:grid; grid-template-columns:76px 1fr 2fr; gap:20px; align-items:start;
+      transition:background .2s;
     }
 
-    .conexao-row {
-      display: grid;
-      grid-template-columns: 100px 1fr 1fr;
-      gap: 32px;
-      padding: 32px 0;
-      border-bottom: 1px solid var(--warm-gray);
-      align-items: start;
-      transition: padding-left 0.2s;
+    .cx-row:hover { background:var(--surface2); }
+
+    .cx-tipo {
+      font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px;
+      color:var(--black); background:var(--purple-light);
+      padding:4px 9px; border-radius:2px; text-transform:uppercase;
+      display:inline-block; margin-top:3px; white-space:nowrap;
     }
 
-    .conexao-row:hover { padding-left: 8px; }
+    .cx-nome { font-weight:700; font-size:16px; color:var(--text-bright); display:block; margin-bottom:4px; }
+    .cx-sub  { font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:1px; color:var(--text-dim); }
+    .cx-desc { font-size:14px; color:var(--text-dim); line-height:1.65; }
 
-    .conexao-tipo {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      margin-top: 4px;
+    /* ── METAS ── */
+    .metas-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; margin-bottom:16px; }
+
+    .meta-col { background:var(--surface); padding:34px 26px; }
+
+    .meta-col-t {
+      font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:2px;
+      color:var(--purple-light); display:block; margin-bottom:18px;
+      padding-bottom:13px; border-bottom:1px solid rgba(155,89,212,.2);
     }
 
-    .conexao-nome {
-      font-family: 'DM Serif Display', serif;
-      font-size: 20px;
-      display: block;
-      margin-bottom: 4px;
+    .meta-item { display:flex; gap:10px; margin-bottom:13px; align-items:flex-start; }
+    .meta-star { font-size:13px; flex-shrink:0; margin-top:2px; }
+    .meta-txt { font-size:13px; color:var(--text-dim); line-height:1.65; }
+    .meta-txt strong { color:var(--text); }
+
+    .metas-leg {
+      display:flex; gap:24px; flex-wrap:wrap;
+      font-family:'Share Tech Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase;
     }
 
-    .conexao-sub {
-      font-size: 13px;
-      color: var(--text-light);
+    /* ── PATROCÍNIO ── */
+    #patrocinador { text-align:center; }
+
+    .spons-box {
+      background:var(--surface); border:1px solid rgba(123,47,190,.22);
+      padding:72px 52px; max-width:800px; margin:0 auto; position:relative; overflow:hidden;
     }
 
-    .conexao-desc {
-      font-size: 14px;
-      font-weight: 300;
-      color: var(--text-light);
-      line-height: 1.65;
+    .spons-box::before {
+      content:''; position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%); width:600px; height:380px;
+      background:radial-gradient(ellipse, rgba(123,47,190,.09) 0%, transparent 70%);
+      pointer-events:none;
     }
 
-    /* ── PATROCINADOR ── */
-    #patrocinador { background: var(--purple); color: white; max-width: 100%; padding: 0; }
-    #patrocinador h2 { color: white; }
-    #patrocinador h2 em { color: var(--cyan); }
-    #patrocinador .section-label { color: rgba(255,255,255,0.4); }
-    #patrocinador .section-label::after { background: rgba(255,255,255,0.15); }
+    .spons-box > * { position:relative; z-index:1; }
 
-    .sponsor-body {
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 100px;
-      align-items: end;
+    .spons-t {
+      font-family:'Bebas Neue',sans-serif; font-size:48px; letter-spacing:2px;
+      line-height:1; color:var(--text-bright); margin-bottom:16px;
     }
 
-    .sponsor-text {
-      font-size: 18px;
-      font-weight: 300;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.8;
+    .spons-t span {
+      background:linear-gradient(90deg, var(--purple-light), var(--cyan));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
     }
 
-    .sponsor-text strong { color: white; font-weight: 500; }
-
-    .sponsor-cta { display: flex; flex-direction: column; gap: 12px; }
-
-    .btn-white {
-      background: white;
-      color: var(--purple);
-      padding: 14px 28px;
-      border-radius: 100px;
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      text-align: center;
-      transition: opacity 0.2s;
-    }
-
-    .btn-white:hover { opacity: 0.9; }
-
-    .btn-outline-white {
-      border: 1px solid rgba(255,255,255,0.3);
-      color: white;
-      padding: 14px 28px;
-      border-radius: 100px;
-      font-size: 14px;
-      text-decoration: none;
-      text-align: center;
-      transition: border-color 0.2s;
-    }
-
-    .btn-outline-white:hover { border-color: white; }
+    .spons-p { font-size:16px; color:var(--text-dim); line-height:1.75; max-width:540px; margin:0 auto 36px; }
 
     /* ── FOOTER ── */
     footer {
-      background: var(--text);
-      padding: 56px 56px 40px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 60px;
-      align-items: end;
+      border-top:1px solid rgba(216,216,232,.07); padding:52px 48px 38px;
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;
     }
 
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 10px;
+    .ft-logo { display:flex; align-items:center; gap:11px; margin-bottom:7px; }
+    .ft-logo img { height:28px; opacity:.7; }
+    .ft-logo span { font-family:'Bebas Neue',sans-serif; font-size:17px; letter-spacing:3px; color:var(--text-dim); }
+    .ft-sub { font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--text-dim); opacity:.42; }
+
+    .ft-links { display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
+
+    .ft-links a {
+      font-family:'Share Tech Mono',monospace; font-size:9px; letter-spacing:2px;
+      color:var(--text-dim); text-decoration:none; text-transform:uppercase; transition:color .2s;
     }
 
-    .footer-logo img { height: 28px; filter: brightness(10); opacity: 0.6; }
-
-    .footer-logo span {
-      font-family: 'DM Serif Display', serif;
-      font-size: 15px;
-      color: rgba(245,243,239,0.6);
-    }
-
-    .footer-sub {
-      font-size: 13px;
-      font-weight: 300;
-      color: rgba(245,243,239,0.3);
-    }
-
-    .footer-links {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      align-items: flex-end;
-    }
-
-    .footer-links a {
-      font-size: 13px;
-      color: rgba(245,243,239,0.4);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover { color: var(--off-white); }
+    .ft-links a:hover { color:var(--purple-light); }
 
     /* ── REVEAL ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
-    }
-
-    .reveal.visible { opacity: 1; transform: none; }
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity:1; transform:none; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 960px) {
-      nav { padding: 0 24px; }
-      .nav-links { display: none; }
+    @media (max-width:960px) {
+      nav { padding:0 20px; height:76px; }
+      .nav-links { display:none; }
+      .hamburger { display:flex; }
+      .mob-drawer { top:76px; }
 
-      #hero { grid-template-columns: 1fr; padding: 68px 24px 0; min-height: auto; }
-      .hero-left { padding: 60px 0; }
-      .hero-right { height: 300px; }
-      .hero-stats-bar { grid-template-columns: 1fr; }
-      .stat-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 28px 24px; }
+      #hero { padding:76px 24px 0; }
+      .hero-inner { grid-template-columns:1fr; gap:28px; }
+      .hero-visual { order:-1; }
+      .logo-wrap { width:190px; height:190px; }
+      .hero-logo { width:158px; height:158px; }
+      .hero-title { font-size:clamp(52px,14vw,82px); }
+      .hero-stats { grid-template-columns:1fr; }
+      .stat-item { border-right:none; border-bottom:1px solid rgba(216,216,232,.06); }
 
-      .section-wrap { padding: 80px 24px; }
-      .sobre-grid, .robo-layout, .sponsor-body { grid-template-columns: 1fr; gap: 48px; }
-      .members-grid { grid-template-columns: repeat(2, 1fr); }
-      .member-card:nth-child(4n) { border-right: 1px solid rgba(255,255,255,0.08); }
-      .member-card:nth-child(2n) { border-right: none; }
-      .numbers-row, .outreach-split { grid-template-columns: 1fr; }
-      .conexao-row { grid-template-columns: 1fr; gap: 6px; }
-      footer { grid-template-columns: 1fr; }
-      .footer-links { align-items: flex-start; }
+      section { padding:80px 24px; }
+      .sobre-grid, .robo-grid { grid-template-columns:1fr; gap:36px; }
+      .nums-row { grid-template-columns:1fr; }
+      .impact-row { grid-template-columns:1fr; }
+      .ard-inner { grid-template-columns:1fr; gap:24px; }
+      .ard-stats { justify-content:center; }
+      .cx-row { grid-template-columns:1fr; gap:8px; }
+      .metas-grid { grid-template-columns:1fr; }
+      .strat-grid { grid-template-columns:1fr; }
+      .spons-box { padding:44px 24px; }
+
+      .eq-header { padding:0 24px 40px; }
+      .team-grid { padding:0 24px; grid-template-columns:repeat(2,1fr); }
+      .team-legend { padding:0 24px; }
+      .out-inner { padding:0 24px; }
+
+      footer { padding:36px 24px; flex-direction:column; align-items:flex-start; }
+    }
+
+    @media (max-width:480px) {
+      .hero-btns { flex-direction:column; }
+      .btn-primary, .btn-secondary { text-align:center; }
     }
   </style>
 </head>
 <body>
 
-<nav>
+<!-- NAV -->
+<nav id="main-nav">
   <a href="#hero" class="nav-logo">
     <img src="logo-icon.png" alt="Lösungsjäger" />
-    <span class="nav-wordmark">Lösungsjäger</span>
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Lösungsjäger</span>
+      <span class="nav-logo-tag">FTC #21342</span>
+    </div>
   </a>
+
   <ul class="nav-links">
     <li><a href="#sobre">Sobre</a></li>
     <li><a href="#equipe">Equipe</a></li>
     <li><a href="#robo">Robô</a></li>
     <li><a href="#outreach">Outreach</a></li>
     <li><a href="#conexoes">Conexões</a></li>
+    <li><a href="#metas">Metas</a></li>
     <li><a href="#patrocinador" class="nav-cta">Patrocinar</a></li>
   </ul>
+
+  <button class="hamburger" id="hbg" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
+<!-- MOBILE DRAWER -->
+<div class="mob-drawer" id="mobMenu">
+  <a href="#sobre"        onclick="closeMenu()">Sobre</a>
+  <a href="#equipe"       onclick="closeMenu()">Equipe</a>
+  <a href="#robo"         onclick="closeMenu()">Robô</a>
+  <a href="#outreach"     onclick="closeMenu()">Outreach</a>
+  <a href="#conexoes"     onclick="closeMenu()">Conexões</a>
+  <a href="#metas"        onclick="closeMenu()">Metas</a>
+  <a href="#patrocinador" onclick="closeMenu()" class="mob-cta">Patrocinar</a>
+</div>
+
+<!-- HERO -->
 <div id="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">FTC Team #21342 · Porto Alegre</div>
-    <h1>Caçadores<br>de <em>Soluções</em></h1>
-    <p class="hero-desc">
-      Somos a <strong>Lösungsjäger</strong> — uma equipe de robótica do Colégio Farroupilha movida por curiosidade, paixão e pela busca de soluções criativas para desafios reais.
-    </p>
-    <div class="hero-actions">
-      <a href="#robo" class="btn-fill">Nosso Robô</a>
-      <a href="#sobre" class="btn-text">Conheça a equipe</a>
+  <div class="hero-bg"></div>
+  <div class="hero-grid-bg"></div>
+
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag">FTC #21342 · Porto Alegre, RS</div>
+      <h1 class="hero-title">
+        <span class="t1">LÖSUNGS</span>
+        <span class="t2">JÄGER</span>
+      </h1>
+      <p class="hero-desc">Os <em>Caçadores de Soluções</em> — equipe de robótica do Colégio Farroupilha movida por curiosidade, paixão e busca constante por soluções criativas.</p>
+      <div class="hero-btns">
+        <a href="#robo"  class="btn-primary">Nosso Robô</a>
+        <a href="#sobre" class="btn-secondary">Conheça a Equipe</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="logo-wrap">
+        <img src="logo-icon.png" alt="Lösungsjäger" class="hero-logo" />
+      </div>
     </div>
   </div>
-  <div class="hero-right">
-    <img src="logo-icon.png" alt="Logo" class="hero-logo-img" />
-    <div class="hero-right-label">
-      <span>Os Caçadores de Soluções</span>
+
+  <div class="hero-stats reveal">
+    <div class="stat-item"><span class="stat-n">2022</span><span class="stat-l">Fundação</span></div>
+    <div class="stat-item"><span class="stat-n">3000+</span><span class="stat-l">Pessoas Impactadas</span></div>
+    <div class="stat-item"><span class="stat-n">240h</span><span class="stat-l">Voluntariado</span></div>
+  </div>
+
+  <div class="scroll-cue"><div class="scroll-line"></div>scroll</div>
+</div>
+
+<!-- SOBRE -->
+<section id="sobre" class="sec-border">
+  <div class="reveal">
+    <span class="sec-tag">// 01 — Sobre</span>
+    <h2 class="sec-title">Quem <span>Somos</span></h2>
+    <div class="sec-div"></div>
+  </div>
+  <div class="sobre-grid">
+    <div class="sobre-text reveal">
+      <p>A <strong>Lösungsjäger #21342</strong> foi criada no final de 2022 no Colégio Farroupilha de Porto Alegre, RS. O nome em alemão significa <strong>"caçadores de soluções"</strong> — refletindo a filosofia da equipe e a história do colégio, entrelaçada com a imigração alemã no Sul do Brasil.</p>
+      <p>Somos <strong>5 veteranos, 4 júniores e 3 calouros</strong> unidos pela paixão por robótica, tecnologia e impacto social. Participamos da <strong>FIRST Tech Challenge (FTC)</strong>, competição para jovens de 14 a 18 anos que desafia a projetar, construir e programar robôs do zero.</p>
+      <p>Nossa <strong>missão</strong> é sonhar com um futuro onde ciência e tecnologia impulsionam os limites da condição humana — através da curiosidade, paixão e crescimento.</p>
+      <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="https://www.instagram.com/losungsjager" target="_blank" class="btn-primary">@losungsjager</a>
+        <a href="mailto:losungsjager@gmail.com" class="btn-secondary">E-mail</a>
+      </div>
+    </div>
+    <div class="values-stack reveal">
+      <div class="val-card"><div class="val-icon">🤝</div><div><span class="val-name">Trabalho em Equipe</span><p class="val-desc">Cada conquista é resultado da colaboração e confiança entre todos os membros.</p></div></div>
+      <div class="val-card"><div class="val-icon">🎯</div><div><span class="val-name">Busca pela Excelência</span><p class="val-desc">Iteramos, testamos e melhoramos continuamente — sem aceitar o "bom o suficiente".</p></div></div>
+      <div class="val-card"><div class="val-icon">🌱</div><div><span class="val-name">Sustentabilidade</span><p class="val-desc">Comprometidos com soluções que respeitam o planeta e promovem inclusão social.</p></div></div>
+      <div class="val-card"><div class="val-icon">⚙️</div><div><span class="val-name">Disciplina & Organização</span><p class="val-desc">FTemP, metas e reflexões guiam cada encontro com foco e propósito claros.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPE -->
+<div id="equipe">
+  <div class="eq-header reveal">
+    <span class="sec-tag">// 02 — Membros</span>
+    <h2 class="sec-title">Nossa <span>Equipe</span></h2>
+    <div class="sec-div"></div>
+  </div>
+  <div class="team-grid reveal">
+    <div class="mem-card"><div class="mem-av">MS</div><span class="mem-name">Manuela S.</span><span class="mem-role r-lider">Líder</span><span class="mem-extra">Programação · 17 anos</span></div>
+    <div class="mem-card"><div class="mem-av">H</div><span class="mem-name">Hans</span><span class="mem-role r-lider">Vice-Líder</span><span class="mem-extra">Programação · 15 anos</span></div>
+    <div class="mem-card"><div class="mem-av">P</div><span class="mem-name">Priscila</span><span class="mem-role r-prog">Programação</span></div>
+    <div class="mem-card"><div class="mem-av">A</div><span class="mem-name">Ana Carolina</span><span class="mem-role r-mec">Mecânica</span></div>
+    <div class="mem-card"><div class="mem-av">B</div><span class="mem-name">Bruno</span><span class="mem-role r-mec">Mecânica</span></div>
+    <div class="mem-card"><div class="mem-av">E</div><span class="mem-name">Eduardo</span><span class="mem-role r-mec">Mecânica</span></div>
+    <div class="mem-card"><div class="mem-av">MM</div><span class="mem-name">Manuela M.</span><span class="mem-role r-mec">Mecânica</span></div>
+    <div class="mem-card"><div class="mem-av">Ar</div><span class="mem-name">Arthur</span><span class="mem-role r-out">Outreach</span></div>
+    <div class="mem-card"><div class="mem-av">Gi</div><span class="mem-name">Giovanna</span><span class="mem-role r-out">Outreach</span></div>
+    <div class="mem-card"><div class="mem-av">Ju</div><span class="mem-name">Julia</span><span class="mem-role r-out">Outreach</span></div>
+    <div class="mem-card"><div class="mem-av">L</div><span class="mem-name">Laura</span><span class="mem-role r-out">Outreach</span></div>
+    <div class="mem-card"><div class="mem-av">G</div><span class="mem-name">Gabriel</span><span class="mem-role r-out">Outreach</span></div>
+  </div>
+  <div class="team-legend reveal">
+    <span class="leg leg-prog">Programação</span>
+    <span class="leg leg-mec">Mecânica</span>
+    <span class="leg leg-out">Outreach</span>
+  </div>
+</div>
+
+<!-- ROBÔ -->
+<section id="robo" class="sec-border">
+  <div class="reveal">
+    <span class="sec-tag">// 03 — Engenharia</span>
+    <h2 class="sec-title">Nosso <span>Robô</span></h2>
+    <div class="sec-div"></div>
+  </div>
+  <div class="robo-grid">
+    <div class="reveal">
+      <div class="specs-list">
+        <div class="spec-row"><span class="spec-k">Temporada</span><span class="spec-v">DECODE 2026</span></div>
+        <div class="spec-row"><span class="spec-k">Chassi</span><span class="spec-v">Rodas Mecanum — omni-direcional</span></div>
+        <div class="spec-row"><span class="spec-k">Plataforma</span><span class="spec-v">Android Studio + SDK FIRST</span></div>
+        <div class="spec-row"><span class="spec-k">Navegação</span><span class="spec-v">Field-Centric com IMU BHI260</span></div>
+        <div class="spec-row"><span class="spec-k">Visão</span><span class="spec-v">VisionPortal + AprilTags</span></div>
+        <div class="spec-row"><span class="spec-k">Alinhamento</span><span class="spec-v">Controle PD automático</span></div>
+        <div class="spec-row"><span class="spec-k">Mecanismo</span><span class="spec-v">Captador elásticos + lançador dupla roda</span></div>
+        <div class="spec-row"><span class="spec-k">Estrutura</span><span class="spec-v">"Gaiola" aço + MDF — inspiração ATV</span></div>
+      </div>
+      <div class="strat-grid">
+        <div class="strat-cell"><span class="strat-lbl">Autônomo</span><span class="strat-t">Área Distante</span><p class="strat-d">Lançamento da posição mais distante — estratégia diferenciada.</p></div>
+        <div class="strat-cell"><span class="strat-lbl">Tele-Op</span><span class="strat-t">Defesa de Campo</span><p class="strat-d">Controle de campo enquanto a aliada foca na pontuação.</p></div>
+        <div class="strat-cell"><span class="strat-lbl">End Game</span><span class="strat-t">Posição Estratégica</span><p class="strat-d">Menor robô dentro da área; segundo com ao menos uma roda na zona.</p></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="ver-panel">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--purple-light);text-transform:uppercase;display:block;margin-bottom:12px;">Evolução do captador</span>
+        <div class="vtabs">
+          <button class="vtab active" onclick="showV(this,'v1')">V1</button>
+          <button class="vtab"        onclick="showV(this,'v2')">V2</button>
+          <button class="vtab"        onclick="showV(this,'v3')">V3 — Final</button>
+        </div>
+        <div id="v1" class="vcont active">
+          <p><strong>Tubo giratório acoplado a duas engrenagens.</strong></p>
+          <p><span class="vp">✓</span> Sistema simples e leve com boa lógica inicial de atrito.</p>
+          <p><span class="vc">✗</span> Pouca estabilidade — o Artifact escapava, alinhamento inconsistente.</p>
+        </div>
+        <div id="v2" class="vcont">
+          <p><strong>Duas engrenagens conectadas por elásticos.</strong></p>
+          <p><span class="vp">✓</span> Melhor captura e contato constante com o Artifact.</p>
+          <p><span class="vc">✗</span> "Ponto cego" nos cantos — os Artifacts travavam e precisavam de remoção manual.</p>
+        </div>
+        <div id="v3" class="vcont">
+          <p><strong>Sistema quadruplo com elásticos + ângulo em acrílico.</strong></p>
+          <p><span class="vp">✓</span> Movimento linear perfeito até o lançador. Coleta confiável e consistente.</p>
+          <p><span class="vp">✓</span> Acrílico eliminou o atrito — MDF seria incompatível.</p>
+        </div>
+      </div>
+      <div style="background:var(--surface);padding:22px;">
+        <p style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--purple-light);text-transform:uppercase;margin-bottom:9px;">Processo iterativo — FTemP</p>
+        <p style="font-size:14px;color:var(--text-dim);line-height:1.75;">Cada versão foi documentada na <strong style="color:var(--text)">FTemP</strong> — registrando o que funcionou, o que não funcionou e os próximos passos. Engenharia como aprendizado contínuo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTREACH -->
+<div id="outreach">
+  <div class="out-inner">
+    <div class="reveal">
+      <span class="sec-tag">// 04 — Impacto Social</span>
+      <h2 class="sec-title">Projeto <span>Voluntaria+</span></h2>
+      <div class="sec-div"></div>
+    </div>
+    <div class="nums-row reveal">
+      <div class="num-cell"><span class="num-big">20</span><span class="num-lbl">ONGs Cadastradas</span><p class="num-desc">Voluntaria+ conectou a equipe com 20 organizações do terceiro setor.</p></div>
+      <div class="num-cell"><span class="num-big">240h</span><span class="num-lbl">Voluntariado</span><p class="num-desc">Mais de 240 horas dedicadas ao serviço comunitário na temporada.</p></div>
+      <div class="num-cell"><span class="num-big">3000</span><span class="num-lbl">Pessoas Alcançadas</span><p class="num-desc">Entre eventos, demonstrações, workshops e mídias sociais.</p></div>
+    </div>
+    <div class="impact-row reveal">
+      <div class="impact-cell">
+        <span class="impact-n">105%</span>
+        <span class="impact-lbl">Meta ACERGS superada</span>
+        <p>A <strong>ACERGS</strong> superou a meta de R$6.000 para aquisição de um móvel para impressora braile — aplicando pensamento de engenharia para apoiar a inclusão de pessoas com deficiência visual.</p>
+      </div>
+      <div class="impact-cell">
+        <span class="impact-n" style="color:var(--cyan);">+320</span>
+        <span class="impact-lbl">Vidas salvas</span>
+        <p>Em colaboração com o <strong>Hemocentro de Porto Alegre</strong>, organizamos uma Campanha de Doação de Sangue que mobilizou 80 voluntários.</p>
+      </div>
+    </div>
+    <div class="ard-card reveal">
+      <span class="ard-tag">Separador de Tampinhas — Projeto Arduino</span>
+      <div class="ard-inner">
+        <p>Sistema automatizado baseado em <strong>Arduino</strong> para triagem de tampas de garrafas PET por cor, usando o sensor <strong>TCS34725</strong> com filtro infravermelho. Tampinhas separadas valem até 4× mais — unindo sustentabilidade e impacto social.</p>
+        <div class="ard-stats">
+          <div class="ard-s"><span class="ard-s-n p">4×</span><span class="ard-s-l">Mais valor</span></div>
+          <div class="ard-s"><span class="ard-s-n c">100%</span><span class="ard-s-l">Sustentável</span></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="hero-stats-bar">
-  <div class="stat-cell">
-    <span class="stat-n">20<em>22</em></span>
-    <span class="stat-l">Fundação da equipe</span>
+<!-- CONEXÕES -->
+<section id="conexoes" class="sec-border">
+  <div class="reveal">
+    <span class="sec-tag">// 05 — Networking</span>
+    <h2 class="sec-title">Conexões & <span>Parceiros</span></h2>
+    <div class="sec-div"></div>
   </div>
-  <div class="stat-cell">
-    <span class="stat-n">3<em>mil</em></span>
-    <span class="stat-l">Pessoas impactadas</span>
-  </div>
-  <div class="stat-cell">
-    <span class="stat-n">240<em>h</em></span>
-    <span class="stat-l">Horas de voluntariado</span>
-  </div>
-</div>
-
-<section id="sobre">
-  <div class="section-wrap">
-    <div class="section-label reveal">01 — Sobre</div>
-    <h2 class="reveal">Quem <em>somos</em></h2>
-    <div class="sobre-grid">
-      <div class="sobre-text reveal">
-        <p>A <strong>Lösungsjäger #21342</strong> foi criada no final de 2022 no Colégio Farroupilha de Porto Alegre. O nome, em alemão, significa <strong>"caçadores de soluções"</strong> — escolhido como reflexo da filosofia da equipe e da história do colégio, entrelaçada com a imigração alemã no Sul do Brasil.</p>
-        <p>Somos <strong>12 estudantes</strong> divididos em mecânica, programação e outreach, unidos pela paixão por robótica e impacto social. Competimos na <strong>FIRST Tech Challenge (FTC)</strong>, que desafia jovens de 14 a 18 anos a projetar, construir e programar robôs do zero.</p>
-        <p>Nossa missão é sonhar com um futuro onde ciência e tecnologia impulsionam os limites da condição humana — por meio da curiosidade, paixão e crescimento contínuo.</p>
-        <div class="sobre-links">
-          <a href="https://instagram.com/losungsjager" target="_blank" class="btn-fill">Instagram</a>
-          <a href="mailto:losungsjager@gmail.com" class="btn-text">losungsjager@gmail.com</a>
-        </div>
-      </div>
-      <div class="values-stack reveal">
-        <div class="value-row">
-          <span class="value-num">01</span>
-          <div>
-            <span class="value-title">Trabalho em equipe</span>
-            <p class="value-desc">Cada conquista é resultado da colaboração e confiança mútua entre todos os membros.</p>
-          </div>
-        </div>
-        <div class="value-row">
-          <span class="value-num">02</span>
-          <div>
-            <span class="value-title">Busca pela excelência</span>
-            <p class="value-desc">Iteramos, testamos e melhoramos sem aceitar o "bom o suficiente".</p>
-          </div>
-        </div>
-        <div class="value-row">
-          <span class="value-num">03</span>
-          <div>
-            <span class="value-title">Sustentabilidade</span>
-            <p class="value-desc">Comprometidos com soluções que respeitam o planeta e promovem inclusão social.</p>
-          </div>
-        </div>
-        <div class="value-row">
-          <span class="value-num">04</span>
-          <div>
-            <span class="value-title">Disciplina & organização</span>
-            <p class="value-desc">FTemP, metas e reflexões guiam cada encontro com foco e propósito.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="cx-list reveal">
+    <div class="cx-row"><span class="cx-tipo">Virtual</span><div><span class="cx-nome">Benderminds #18066</span><span class="cx-sub">Dois Irmãos, RS</span></div><p class="cx-desc">Compartilhamos desafios da temporada e analisamos abordagens de design e programação, ampliando nossa visão sobre diferentes soluções.</p></div>
+    <div class="cx-row"><span class="cx-tipo">Online</span><div><span class="cx-nome">Under Ctrl #14391</span><span class="cx-sub">Rio Grande do Sul</span></div><p class="cx-desc">Discussão sobre falhas comuns em mecanismos de coleta e armazenamento, influenciando ajustes no nosso processo de prototipagem.</p></div>
+    <div class="cx-row"><span class="cx-tipo">Palestra</span><div><span class="cx-nome">Rafael Lerch</span><span class="cx-sub">Engenheiro · Mestre UFRGS</span></div><p class="cx-desc">Palestra sobre gestão de risco e sua aplicação durante o preparo para competições e imprevistos em torneios.</p></div>
+    <div class="cx-row"><span class="cx-tipo">Virtual</span><div><span class="cx-nome">SESI Battech #17742</span><span class="cx-sub">Rio Grande do Norte</span></div><p class="cx-desc">Reforçou a importância da colaboração e do "Gracious Professionalism" — crescimento técnico acontece por experiências compartilhadas.</p></div>
+    <div class="cx-row"><span class="cx-tipo">Online</span><div><span class="cx-nome">Criadores do Amanhã #24529</span><span class="cx-sub">Paraíba</span></div><p class="cx-desc">Ferramenta de aprendizagem para membros juniores, que compreenderam na prática os valores da FIRST®.</p></div>
   </div>
 </section>
 
-<section id="equipe">
-  <div class="section-wrap">
-    <div class="section-label reveal">02 — Membros</div>
-    <h2 class="reveal">Nossa <em>equipe</em></h2>
-    <p class="equipe-intro reveal">12 estudantes do Colégio Farroupilha — 5 veteranos, 4 júniores e 3 calouros.</p>
-    <div class="members-grid reveal">
-      <div class="member-card">
-        <div class="member-initial initial-lid">M</div>
-        <span class="member-name">Manuela S.</span>
-        <span class="member-role role-lid">Líder · Programação</span>
-        <span class="member-tag">17 anos</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-lid">H</div>
-        <span class="member-name">Hans</span>
-        <span class="member-role role-lid">Vice-Líder · Programação</span>
-        <span class="member-tag">15 anos</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-prog">P</div>
-        <span class="member-name">Priscila</span>
-        <span class="member-role role-prog">Programação</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-mec">A</div>
-        <span class="member-name">Ana Carolina</span>
-        <span class="member-role role-mec">Mecânica</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-mec">B</div>
-        <span class="member-name">Bruno</span>
-        <span class="member-role role-mec">Mecânica</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-mec">E</div>
-        <span class="member-name">Eduardo</span>
-        <span class="member-role role-mec">Mecânica</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-mec">M</div>
-        <span class="member-name">Manuela M.</span>
-        <span class="member-role role-mec">Mecânica</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-out">A</div>
-        <span class="member-name">Arthur</span>
-        <span class="member-role role-out">Outreach</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-out">G</div>
-        <span class="member-name">Giovanna</span>
-        <span class="member-role role-out">Outreach</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-out">J</div>
-        <span class="member-name">Julia</span>
-        <span class="member-role role-out">Outreach</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-out">L</div>
-        <span class="member-name">Laura</span>
-        <span class="member-role role-out">Outreach</span>
-      </div>
-      <div class="member-card">
-        <div class="member-initial initial-out">G</div>
-        <span class="member-name">Gabriel</span>
-        <span class="member-role role-out">Outreach</span>
-      </div>
+<!-- METAS -->
+<section id="metas" class="sec-border">
+  <div class="reveal">
+    <span class="sec-tag">// 06 — Objetivos</span>
+    <h2 class="sec-title">Metas & <span>Reflexões</span></h2>
+    <div class="sec-div"></div>
+  </div>
+  <div class="metas-grid reveal">
+    <div class="meta-col">
+      <span class="meta-col-t">Comunidade</span>
+      <div class="meta-item"><span class="meta-star">★</span><p class="meta-txt"><strong>Programa Voluntaria+</strong> — mais de R$6.000 arrecadados para ACERGS e 13 ONGs inscritas.</p></div>
+      <div class="meta-item"><span class="meta-star" style="color:var(--cyan)">●</span><p class="meta-txt"><strong>Separador de Tampinhas</strong> automático — automação com impacto social real.</p></div>
     </div>
-    <div class="role-legend reveal">
-      <div class="legend-item"><span class="legend-dot" style="background:var(--cyan);opacity:0.7"></span>Programação</div>
-      <div class="legend-item"><span class="legend-dot" style="background:rgba(180,140,230,0.85)"></span>Mecânica</div>
-      <div class="legend-item"><span class="legend-dot" style="background:rgba(220,170,80,0.85)"></span>Outreach</div>
+    <div class="meta-col">
+      <span class="meta-col-t">Robô</span>
+      <div class="meta-item"><span class="meta-star">★</span><p class="meta-txt">Montar um <strong>robô funcional</strong> até a regional e aprimorá-lo para a fase nacional.</p></div>
+      <div class="meta-item"><span class="meta-star">★</span><p class="meta-txt">Ter um <strong>Tele-Op funcional</strong> com estratégia de defesa de campo.</p></div>
+      <div class="meta-item"><span class="meta-star">★</span><p class="meta-txt">Adicionar <strong>novos mecanismos</strong> consolidando processo iterativo e sustentável.</p></div>
     </div>
+    <div class="meta-col">
+      <span class="meta-col-t">Equipe</span>
+      <div class="meta-item"><span class="meta-star" style="color:var(--cyan)">●</span><p class="meta-txt">Mentores <strong>ensinarem os novatos</strong> os valores da FIRST®.</p></div>
+      <div class="meta-item"><span class="meta-star" style="color:var(--cyan)">●</span><p class="meta-txt">Busca por <strong>patrocinadores</strong> para custear materiais e viagens.</p></div>
+      <div class="meta-item"><span class="meta-star" style="color:var(--cyan)">●</span><p class="meta-txt"><strong>Conectar-se</strong> com mais equipes regionais, nacionais e internacionais.</p></div>
+    </div>
+  </div>
+  <div class="metas-leg reveal">
+    <span>★ Meta concluída</span>
+    <span style="color:var(--cyan)">● Meta em andamento</span>
   </div>
 </section>
 
-<section id="robo">
-  <div class="section-wrap">
-    <div class="section-label reveal">03 — Engenharia</div>
-    <h2 class="reveal">Nosso <em>robô</em></h2>
-    <div class="robo-layout">
-      <div class="reveal">
-        <div class="specs-list">
-          <div class="spec-row"><span class="spec-key">Temporada</span><span class="spec-val">DECODE 2026</span></div>
-          <div class="spec-row"><span class="spec-key">Chassi</span><span class="spec-val">Rodas Mecanum — omni-direcional</span></div>
-          <div class="spec-row"><span class="spec-key">Plataforma</span><span class="spec-val">Android Studio + SDK FIRST</span></div>
-          <div class="spec-row"><span class="spec-key">Navegação</span><span class="spec-val">Field-Centric com IMU BHI260</span></div>
-          <div class="spec-row"><span class="spec-key">Visão</span><span class="spec-val">VisionPortal + AprilTags</span></div>
-          <div class="spec-row"><span class="spec-key">Alinhamento</span><span class="spec-val">Controle PD automático</span></div>
-          <div class="spec-row"><span class="spec-key">Mecanismo</span><span class="spec-val">Captador elásticos + lançador dupla roda</span></div>
-          <div class="spec-row"><span class="spec-key">Estrutura</span><span class="spec-val">"Gaiola" aço + MDF — inspiração ATV</span></div>
-        </div>
-        <div class="estrategia-grid">
-          <div class="estrat-cell">
-            <span class="estrat-label">Autônomo</span>
-            <span class="estrat-title">Área distante</span>
-            <p class="estrat-text">Lançamento da posição mais distante — estratégia diferenciada da maioria.</p>
-          </div>
-          <div class="estrat-cell">
-            <span class="estrat-label">Tele-Op</span>
-            <span class="estrat-title">Defesa de campo</span>
-            <p class="estrat-text">Controle de campo enquanto a aliada foca na pontuação.</p>
-          </div>
-          <div class="estrat-cell">
-            <span class="estrat-label">End Game</span>
-            <span class="estrat-title">Posição estratégica</span>
-            <p class="estrat-text">Menor robô dentro da área; segundo com ao menos uma roda dentro da zona.</p>
-          </div>
-        </div>
-      </div>
-      <div class="reveal">
-        <p style="font-size:11px;font-weight:500;letter-spacing:0.09em;text-transform:uppercase;color:var(--mid-gray);margin-bottom:16px;">Evolução do captador</p>
-        <div class="evolucao">
-          <button class="version-btn active" onclick="selectVersion(this)">
-            <span class="vbtn-num">V1</span>
-            <div>
-              <span class="vbtn-title">Tubo giratório com engrenagens</span>
-              <p class="vbtn-desc">Sistema simples e leve. O tubo girava de forma descontrolada — o Artifact escapava com frequência e o alinhamento era inconsistente.</p>
-            </div>
-          </button>
-          <button class="version-btn" onclick="selectVersion(this)">
-            <span class="vbtn-num">V2</span>
-            <div>
-              <span class="vbtn-title">Duas engrenagens com elásticos</span>
-              <p class="vbtn-desc">Melhor contato com o Artifact, mas um "ponto cego" nos cantos internos fazia os objetos travarem e precisarem de remoção manual.</p>
-            </div>
-          </button>
-          <button class="version-btn" onclick="selectVersion(this)">
-            <span class="vbtn-num">V3</span>
-            <div>
-              <span class="vbtn-title">Sistema quadruplo + acrílico</span>
-              <p class="vbtn-desc">Movimento linear perfeito até o lançador. Coleta confiável e consistente. O acrílico eliminou o atrito com o Artifact.</p>
-            </div>
-          </button>
-        </div>
-        <div style="background:var(--warm-gray);padding:24px;">
-          <p style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:6px;">Processo iterativo</p>
-          <p style="font-size:14px;font-weight:300;color:var(--text-light);line-height:1.7;">Cada versão foi documentada na <strong style="color:var(--text);font-weight:500">FTemP</strong> — registrando o que funcionou, o que não funcionou e os próximos passos.</p>
-        </div>
-      </div>
-    </div>
+<!-- PATROCÍNIO -->
+<section id="patrocinador" class="sec-border">
+  <div class="spons-box reveal">
+    <h2 class="spons-t">Seja um <span>Patrocinador</span></h2>
+    <p class="spons-p">Ao apoiar a Lösungsjäger, você investe na próxima geração de engenheiros, programadores e líderes. Junte-se a nós na missão de transformar <strong style="color:var(--text-bright)">ciência e tecnologia em impacto humano real.</strong></p>
+    <a href="mailto:losungsjager@gmail.com" class="btn-primary">Entrar em Contato</a>
   </div>
 </section>
 
-<section id="outreach">
-  <div class="section-wrap">
-    <div class="section-label reveal">04 — Impacto Social</div>
-    <h2 class="reveal">Projeto <em>Voluntaria+</em></h2>
-    <div class="numbers-row reveal">
-      <div class="number-cell">
-        <span class="number-big">20</span>
-        <span class="number-label">ONGs cadastradas</span>
-        <p class="number-desc">Voluntaria+ conectou a equipe com 20 organizações do terceiro setor.</p>
-      </div>
-      <div class="number-cell">
-        <span class="number-big">240<em>h</em></span>
-        <span class="number-label">Voluntariado</span>
-        <p class="number-desc">Mais de 240 horas dedicadas ao serviço comunitário ao longo da temporada.</p>
-      </div>
-      <div class="number-cell">
-        <span class="number-big">3<em>mil</em></span>
-        <span class="number-label">Pessoas alcançadas</span>
-        <p class="number-desc">Entre eventos, demonstrações e mídias sociais.</p>
-      </div>
-    </div>
-    <div class="outreach-split reveal">
-      <div class="outreach-block">
-        <span class="outreach-block-num">105%</span>
-        <span class="outreach-block-label">Meta ACERGS superada</span>
-        <p>A <strong>ACERGS</strong> superou a meta de R$6.000 para aquisição de um móvel para impressora braile — aplicando pensamento de engenharia para apoiar inclusão de pessoas com deficiência visual.</p>
-      </div>
-      <div class="outreach-block">
-        <span class="outreach-block-num">+320</span>
-        <span class="outreach-block-label">Vidas salvas</span>
-        <p>Em colaboração com o <strong>Hemocentro de Porto Alegre</strong>, estruturamos uma Campanha de Doação de Sangue que mobilizou 80 voluntários.</p>
-      </div>
-    </div>
-    <div style="background:white;padding:40px;" class="reveal">
-      <p style="font-size:11px;font-weight:500;letter-spacing:0.09em;text-transform:uppercase;color:var(--cyan);margin-bottom:20px;">Separador de tampinhas — Projeto Arduino</p>
-      <div style="display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;">
-        <p style="font-size:16px;font-weight:300;color:var(--text-light);line-height:1.8;">Sistema automatizado baseado em <strong style="color:var(--text);font-weight:500">Arduino</strong> para triagem de tampas de garrafas PET por cor, usando o sensor <strong style="color:var(--text);font-weight:500">TCS34725</strong> com filtro infravermelho. Tampinhas separadas por cor valem até 4× mais para as recicladoras.</p>
-        <div style="display:flex;gap:40px;flex-shrink:0;">
-          <div style="text-align:center;">
-            <p style="font-family:'DM Serif Display',serif;font-style:italic;font-size:44px;color:var(--purple);line-height:1;">4×</p>
-            <p style="font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--mid-gray);">mais valor</p>
-          </div>
-          <div style="text-align:center;">
-            <p style="font-family:'DM Serif Display',serif;font-style:italic;font-size:44px;color:var(--cyan);line-height:1;">100%</p>
-            <p style="font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--mid-gray);">sustentável</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="conexoes">
-  <div class="section-wrap">
-    <div class="section-label reveal">05 — Networking</div>
-    <h2 class="reveal">Conexões & <em>parceiros</em></h2>
-    <div class="conexoes-list reveal">
-      <div class="conexao-row">
-        <span class="conexao-tipo">Virtual</span>
-        <div><span class="conexao-nome">Benderminds #18066</span><span class="conexao-sub">Dois Irmãos, RS</span></div>
-        <p class="conexao-desc">Compartilhamos desafios da temporada e analisamos abordagens de design e programação, ampliando nossa visão sobre diferentes soluções.</p>
-      </div>
-      <div class="conexao-row">
-        <span class="conexao-tipo">Online</span>
-        <div><span class="conexao-nome">Under Ctrl #14391</span><span class="conexao-sub">Rio Grande do Sul</span></div>
-        <p class="conexao-desc">Discussão sobre falhas comuns em mecanismos de coleta e armazenamento, influenciando ajustes no nosso processo de prototipagem.</p>
-      </div>
-      <div class="conexao-row">
-        <span class="conexao-tipo">Palestra</span>
-        <div><span class="conexao-nome">Rafael Lerch</span><span class="conexao-sub">Engenheiro · Mestre UFRGS</span></div>
-        <p class="conexao-desc">Palestra sobre gestão de risco e aplicação durante o preparo para competições e imprevistos em torneios.</p>
-      </div>
-      <div class="conexao-row">
-        <span class="conexao-tipo">Virtual</span>
-        <div><span class="conexao-nome">SESI Battech #17742</span><span class="conexao-sub">Rio Grande do Norte</span></div>
-        <p class="conexao-desc">Reforçou a importância da colaboração e do "Gracious Professionalism" — crescimento técnico acontece por experiências compartilhadas.</p>
-      </div>
-      <div class="conexao-row">
-        <span class="conexao-tipo">Online</span>
-        <div><span class="conexao-nome">Criadores do Amanhã #24529</span><span class="conexao-sub">Paraíba</span></div>
-        <p class="conexao-desc">Ferramenta de aprendizagem para os membros juniores, que compreenderam na prática os valores da FIRST®.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="patrocinador">
-  <div class="section-wrap">
-    <div class="section-label reveal">06 — Apoio</div>
-    <h2 class="reveal">Seja um <em>patrocinador</em></h2>
-    <div class="sponsor-body">
-      <p class="sponsor-text reveal">Ao apoiar a Lösungsjäger, você investe na próxima geração de engenheiros, programadores e líderes. Junte-se a nós na missão de transformar <strong>ciência e tecnologia em impacto humano real.</strong></p>
-      <div class="sponsor-cta reveal">
-        <a href="mailto:losungsjager@gmail.com" class="btn-white">Entrar em contato</a>
-        <a href="https://instagram.com/losungsjager" target="_blank" class="btn-outline-white">Ver no Instagram</a>
-      </div>
-    </div>
-  </div>
-</section>
-
+<!-- FOOTER -->
 <footer>
   <div>
-    <div class="footer-logo">
-      <img src="logo-icon.png" alt="logo" />
-      <span>Lösungsjäger #21342</span>
-    </div>
-    <p class="footer-sub">Colégio Farroupilha · Porto Alegre, RS · FIRST Tech Challenge</p>
+    <div class="ft-logo"><img src="logo-icon.png" alt="logo" /><span>Lösungsjäger #21342</span></div>
+    <p class="ft-sub">Colégio Farroupilha · Porto Alegre, RS · FIRST Tech Challenge</p>
   </div>
-  <div class="footer-links">
-    <a href="https://instagram.com/losungsjager" target="_blank">@losungsjager</a>
-    <a href="https://tiktok.com/@losungsjager" target="_blank">TikTok</a>
-    <a href="mailto:losungsjager@gmail.com">losungsjager@gmail.com</a>
+  <div class="ft-links">
+    <a href="https://instagram.com/losungsjager" target="_blank">Instagram</a>
+    <a href="https://tiktok.com/@losungsjager"   target="_blank">TikTok</a>
+    <a href="mailto:losungsjager@gmail.com">E-mail</a>
   </div>
 </footer>
 
 <script>
-  function selectVersion(el) {
-    document.querySelectorAll('.version-btn').forEach(b => b.classList.remove('active'));
-    el.classList.add('active');
+  function toggleMenu() {
+    document.getElementById('hbg').classList.toggle('open');
+    document.getElementById('mobMenu').classList.toggle('open');
   }
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-    });
-  }, { threshold: 0.08 });
+  function closeMenu() {
+    document.getElementById('hbg').classList.remove('open');
+    document.getElementById('mobMenu').classList.remove('open');
+  }
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  document.addEventListener('click', e => {
+    const nav  = document.getElementById('main-nav');
+    const menu = document.getElementById('mobMenu');
+    if (menu.classList.contains('open') && !nav.contains(e.target) && !menu.contains(e.target)) closeMenu();
+  });
+
+  function showV(btn, id) {
+    const panel = btn.closest('.ver-panel');
+    panel.querySelectorAll('.vtab').forEach(b => b.classList.remove('active'));
+    panel.querySelectorAll('.vcont').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(id).classList.add('active');
+  }
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold:.08 });
+
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
 </html>
