@@ -757,19 +757,79 @@
     /* ── LIGHT MODE VARIABLES ── */
     [data-theme="light"] {
       --purple: #6A1FA8;
-      --purple-light: #8040C0;
+      --purple-light: #7030B8;
       --purple-dark: #3A0878;
-      --cyan: #0099A8;
-      --black: #F0EFF8;
-      --dark: #E6E4F4;
-      --surface: #DDDAEE;
-      --surface2: #D0CCDF;
-      --text: #2A2240;
-      --text-bright: #120E28;
-      --text-dim: #5A5070;
-      --nav-bg: rgba(240,239,248,.96);
-      --nav-border: rgba(0,153,168,.22);
+      --cyan: #007A88;
+      --black: #F2F0FA;
+      --dark: #E8E5F5;
+      --surface: #DEDAF0;
+      --surface2: #D0CADE;
+      --text: #1E1838;
+      --text-bright: #0A0720;
+      --text-dim: #48406A;
+      --nav-bg: rgba(242,240,250,.97);
+      --nav-border: rgba(0,122,136,.25);
     }
+
+    /* light mode overrides for things that need explicit fixes */
+    [data-theme="light"] .sec-tag           { color: #6A1FA8; }
+    [data-theme="light"] .spec-k            { color: #6A1FA8; }
+    [data-theme="light"] .strat-lbl         { color: #6A1FA8; }
+    [data-theme="light"] .num-lbl           { color: #48406A; }
+    [data-theme="light"] .ard-tag           { color: #6A1FA8; }
+    [data-theme="light"] .cx-tipo           { background: #7030B8; color: #fff; }
+    [data-theme="light"] .gh-badge          { border-color: rgba(106,31,168,.4); color: #6A1FA8; }
+    [data-theme="light"] .gh-repo-name      { color: #007A88; }
+    [data-theme="light"] .ck                { color: #48406A; }
+    [data-theme="light"] .ct                { color: #2255AA; }
+    [data-theme="light"] .cm                { color: #007A88; }
+    [data-theme="light"] .cn                { color: #B05010; }
+    [data-theme="light"] .gh-code           { background: #E8E5F5; color: #1E1838; }
+    [data-theme="light"] .gh-snippet        { border-color: rgba(30,24,56,.12); }
+    [data-theme="light"] .gh-snippet-header { background: #D0CADE; }
+    [data-theme="light"] .vp               { color: #1A7A3A; }
+    [data-theme="light"] .vc               { color: #AA2020; }
+    [data-theme="light"] .meta-star        { color: #6A1FA8; }
+    [data-theme="light"] .val-icon         { background: rgba(106,31,168,.08); border-color: rgba(106,31,168,.2); }
+    [data-theme="light"] .hero-grid-bg     { opacity: .4; }
+    [data-theme="light"] .num-big {
+      background: linear-gradient(135deg, #6A1FA8, #007A88);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    [data-theme="light"] .stat-n {
+      background: linear-gradient(135deg, #6A1FA8, #007A88);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    [data-theme="light"] .hero-title .t2 {
+      background: linear-gradient(90deg, #6A1FA8, #007A88);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    [data-theme="light"] .sec-title span {
+      background: linear-gradient(90deg, #6A1FA8, #007A88);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    [data-theme="light"] .impact-n         { color: #6A1FA8; }
+    [data-theme="light"] .mem-role-text    { color: #1E1838 !important; }
+    [data-theme="light"] .r-prog  { color: #007A88; background: rgba(0,122,136,.08);  border-color: rgba(0,122,136,.3); }
+    [data-theme="light"] .r-mec   { color: #6A1FA8; background: rgba(106,31,168,.08); border-color: rgba(106,31,168,.3); }
+    [data-theme="light"] .r-out   { color: #8A5500; background: rgba(138,85,0,.08);   border-color: rgba(138,85,0,.3); }
+    [data-theme="light"] .r-lider { color: #007A88; background: rgba(0,122,136,.12);  border-color: rgba(0,122,136,.4); }
+    [data-theme="light"] .mem-extra { color: #48406A; }
+    [data-theme="light"] .meta-col-t { color: #6A1FA8; border-bottom-color: rgba(106,31,168,.2); }
+    [data-theme="light"] .metas-grid { background: rgba(0,0,0,.06); }
+    [data-theme="light"] .hero-bg {
+      background:
+        radial-gradient(ellipse 55% 55% at 68% 50%, rgba(106,31,168,.10) 0%, transparent 70%),
+        radial-gradient(ellipse 35% 50% at 22% 58%, rgba(0,122,136,.06) 0%, transparent 60%),
+        linear-gradient(180deg, var(--black) 0%, var(--dark) 100%);
+    }
+    [data-theme="light"] .spons-box::before {
+      background: radial-gradient(ellipse, rgba(106,31,168,.07) 0%, transparent 70%);
+    }
+    [data-theme="light"] .mem-photo-wrap { border-color: rgba(106,31,168,.25); }
+    [data-theme="light"] .mem-social a   { color: #007A88; border-color: rgba(0,122,136,.25); }
+    [data-theme="light"] .mem-social a:hover { background: rgba(0,122,136,.1); }
+    [data-theme="light"] .mem-year-badge { background: rgba(106,31,168,.1); color: #6A1FA8; border-color: rgba(106,31,168,.25); }
 
     [data-theme="dark"] {
       --nav-bg: rgba(14,14,22,.94);
@@ -994,6 +1054,96 @@
     @media (max-width:960px) {
       .github-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── MEMBER CARDS WITH PHOTO ── */
+    .team-grid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+    }
+
+    .mem-card {
+      padding: 0 !important;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mem-photo-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(135deg, var(--purple-dark), var(--surface2));
+      border-bottom: 2px solid rgba(155,89,212,.2);
+    }
+
+    .mem-photo-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block;
+      transition: transform .4s ease;
+    }
+
+    .mem-card:hover .mem-photo-wrap img { transform: scale(1.05); }
+
+    /* placeholder avatar (for missing photos) */
+    .mem-av-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: 42px; color: var(--text-bright);
+    }
+
+    .mem-info {
+      padding: 18px 16px 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      flex: 1;
+    }
+
+    .mem-name { margin-bottom: 0 !important; }
+
+    .mem-year-badge {
+      display: inline-block;
+      font-family: 'Share Tech Mono', monospace; font-size: 9px;
+      letter-spacing: 2px; text-transform: uppercase;
+      background: rgba(155,89,212,.1); color: var(--purple-light);
+      border: 1px solid rgba(155,89,212,.2);
+      padding: 2px 8px; border-radius: 2px;
+      width: fit-content;
+    }
+
+    .mem-age {
+      font-family: 'Share Tech Mono', monospace; font-size: 10px;
+      letter-spacing: 1px; color: var(--text-dim);
+    }
+
+    .mem-social {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;
+    }
+
+    .mem-social a {
+      font-family: 'Share Tech Mono', monospace; font-size: 9px;
+      letter-spacing: 1px; color: var(--cyan);
+      border: 1px solid rgba(0,212,212,.2);
+      padding: 3px 8px; border-radius: 2px;
+      text-decoration: none;
+      transition: background .2s, color .2s;
+      white-space: nowrap;
+    }
+
+    .mem-social a:hover {
+      background: rgba(0,212,212,.1);
+    }
+
+    @media (max-width:960px) {
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    @media (max-width:480px) {
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1090,7 +1240,7 @@
       <p>Nossa <strong>missão</strong> é sonhar com um futuro onde ciência e tecnologia impulsionam os limites da condição humana — através da curiosidade, paixão e crescimento.</p>
       <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap;">
         <a href="https://www.instagram.com/losungsjager" target="_blank" class="btn-primary">@losungsjager</a>
-        <a href="mailto:losungsjager@gmail.com" class="btn-secondary">E-mail</a>
+        <a href="/cdn-cgi/l/email-protection#264a4955534841554c4741435466414b474f4a0845494b" class="btn-secondary">E-mail</a>
       </div>
     </div>
     <div class="values-stack reveal">
@@ -1110,18 +1260,126 @@
     <div class="sec-div"></div>
   </div>
   <div class="team-grid reveal">
-    <div class="mem-card"><div class="mem-av">MS</div><span class="mem-name">Manuela S.</span><span class="mem-role r-lider">Líder</span><span class="mem-extra">Programação · 17 anos</span></div>
-    <div class="mem-card"><div class="mem-av">H</div><span class="mem-name">Hans</span><span class="mem-role r-lider">Vice-Líder</span><span class="mem-extra">Programação · 15 anos</span></div>
-    <div class="mem-card"><div class="mem-av">P</div><span class="mem-name">Priscila</span><span class="mem-role r-prog">Programação</span></div>
-    <div class="mem-card"><div class="mem-av">A</div><span class="mem-name">Ana Carolina</span><span class="mem-role r-mec">Mecânica</span></div>
-    <div class="mem-card"><div class="mem-av">B</div><span class="mem-name">Bruno</span><span class="mem-role r-mec">Mecânica</span></div>
-    <div class="mem-card"><div class="mem-av">E</div><span class="mem-name">Eduardo</span><span class="mem-role r-mec">Mecânica</span></div>
-    <div class="mem-card"><div class="mem-av">MM</div><span class="mem-name">Manuela M.</span><span class="mem-role r-mec">Mecânica</span></div>
-    <div class="mem-card"><div class="mem-av">Ar</div><span class="mem-name">Arthur</span><span class="mem-role r-out">Outreach</span></div>
-    <div class="mem-card"><div class="mem-av">Gi</div><span class="mem-name">Giovanna</span><span class="mem-role r-out">Outreach</span></div>
-    <div class="mem-card"><div class="mem-av">Ju</div><span class="mem-name">Julia</span><span class="mem-role r-out">Outreach</span></div>
-    <div class="mem-card"><div class="mem-av">L</div><span class="mem-name">Laura</span><span class="mem-role r-out">Outreach</span></div>
-    <div class="mem-card"><div class="mem-av">G</div><span class="mem-name">Gabriel</span><span class="mem-role r-out">Outreach</span></div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><img src="members/manuela_s.png" alt="Foto de Manuela S., membro da equipe Lösungsjäger" loading="lazy" /></div>
+      <div class="mem-info">
+        <span class="mem-name">Manuela S.</span>
+        <span class="mem-role r-lider">Líder · Programação</span>
+        <span class="mem-year-badge">Veterana</span>
+        <span class="mem-age">17 anos</span>
+        <div class="mem-social"><a href="https://instagram.com/manu_leite_spinelli" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Manuela S.">@manu_leite_spinelli</a></div>
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><img src="members/hans.png" alt="Foto de Hans, membro da equipe Lösungsjäger" loading="lazy" /></div>
+      <div class="mem-info">
+        <span class="mem-name">Hans</span>
+        <span class="mem-role r-lider">Vice-Líder · Prog.</span>
+        <span class="mem-year-badge">Júnior</span>
+        <span class="mem-age">15 anos</span>
+        <div class="mem-social"><a href="https://instagram.com/HansT030" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Hans">@HansT030</a></div>
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><img src="members/priscila.png" alt="Foto de Priscila, membro da equipe Lösungsjäger" loading="lazy" /></div>
+      <div class="mem-info">
+        <span class="mem-name">Priscila</span>
+        <span class="mem-role r-prog">Programação</span>
+        <span class="mem-year-badge">Veterana</span>
+        <span class="mem-age">18 anos</span>
+        
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><div class="mem-av-placeholder">A</div></div>
+      <div class="mem-info">
+        <span class="mem-name">Ana Carolina</span>
+        <span class="mem-role r-mec">Mecânica</span>
+        <span class="mem-year-badge">Veterana</span>
+        <span class="mem-age">18 anos</span>
+        <div class="mem-social"><a href="https://instagram.com/anabortolomiol" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Ana Carolina">@anabortolomiol</a></div>
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><div class="mem-av-placeholder">B</div></div>
+      <div class="mem-info">
+        <span class="mem-name">Bruno</span>
+        <span class="mem-role r-mec">Mecânica</span>
+        <span class="mem-year-badge">Veterano</span>
+        <span class="mem-age">18 anos</span>
+        <div class="mem-social"><a href="https://instagram.com/bruno_denaldi" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Bruno">@bruno_denaldi</a></div>
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><img src="members/eduardo.png" alt="Foto de Eduardo, membro da equipe Lösungsjäger" loading="lazy" /></div>
+      <div class="mem-info">
+        <span class="mem-name">Eduardo</span>
+        <span class="mem-role r-mec">Mecânica</span>
+        <span class="mem-year-badge">Júnior</span>
+        <span class="mem-age">17 anos</span>
+        <div class="mem-social"><a href="https://instagram.com/eduardoagrifoglio" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Eduardo">@eduardoagrifoglio</a></div>
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><img src="members/manuela_m.png" alt="Foto de Manuela M., membro da equipe Lösungsjäger" loading="lazy" /></div>
+      <div class="mem-info">
+        <span class="mem-name">Manuela M.</span>
+        <span class="mem-role r-mec">Mecânica</span>
+        <span class="mem-year-badge">Júnior</span>
+        <span class="mem-age">17 anos</span>
+        
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><div class="mem-av-placeholder">Ar</div></div>
+      <div class="mem-info">
+        <span class="mem-name">Arthur</span>
+        <span class="mem-role r-out">Outreach</span>
+        <span class="mem-year-badge">Júnior</span>
+        <span class="mem-age">17 anos</span>
+        <div class="mem-social"><a href="https://instagram.com/arthur_lerch" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Arthur">@arthur_lerch</a></div>
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><img src="members/giovanna.png" alt="Foto de Giovanna, membro da equipe Lösungsjäger" loading="lazy" /></div>
+      <div class="mem-info">
+        <span class="mem-name">Giovanna</span>
+        <span class="mem-role r-out">Outreach</span>
+        <span class="mem-year-badge">Veterana</span>
+        <span class="mem-age">18 anos</span>
+        <div class="mem-social"><a href="https://instagram.com/giovannapagnussatt" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Giovanna">@giovannapagnussatt</a></div>
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><img src="members/julia.png" alt="Foto de Julia, membro da equipe Lösungsjäger" loading="lazy" /></div>
+      <div class="mem-info">
+        <span class="mem-name">Julia</span>
+        <span class="mem-role r-out">Outreach</span>
+        <span class="mem-year-badge">Júnior</span>
+        <span class="mem-age">17 anos</span>
+        <div class="mem-social"><a href="https://instagram.com/Juliacardealgra" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Julia">@Juliacardealgra</a></div>
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><img src="members/laura.png" alt="Foto de Laura, membro da equipe Lösungsjäger" loading="lazy" /></div>
+      <div class="mem-info">
+        <span class="mem-name">Laura</span>
+        <span class="mem-role r-out">Outreach</span>
+        <span class="mem-year-badge">Caloura</span>
+        <span class="mem-age">16 anos</span>
+        <div class="mem-social"><a href="https://instagram.com/lauradstreck" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Laura">@lauradstreck</a></div>
+      </div>
+    </div>
+    <div class="mem-card">
+      <div class="mem-photo-wrap"><div class="mem-av-placeholder">G</div></div>
+      <div class="mem-info">
+        <span class="mem-name">Gabriel</span>
+        <span class="mem-role r-out">Outreach</span>
+        <span class="mem-year-badge">Júnior</span>
+        <span class="mem-age">17 anos</span>
+        
+      </div>
+    </div>
   </div>
   <div class="team-legend reveal">
     <span class="leg leg-prog">Programação</span>
@@ -1278,7 +1536,7 @@
   <div class="spons-box reveal">
     <h2 class="spons-t">Seja um <span>Patrocinador</span></h2>
     <p class="spons-p">Ao apoiar a Lösungsjäger, você investe na próxima geração de engenheiros, programadores e líderes. Junte-se a nós na missão de transformar <strong style="color:var(--text-bright)">ciência e tecnologia em impacto humano real.</strong></p>
-    <a href="mailto:losungsjager@gmail.com" class="btn-primary">Entrar em Contato</a>
+    <a href="/cdn-cgi/l/email-protection#711d1e02041f16021b1016140331161c10181d5f121e1c" class="btn-primary">Entrar em Contato</a>
   </div>
 </section>
 
@@ -1373,11 +1631,11 @@ lastError = tagError;</code></pre>
   <div class="ft-links">
     <a href="https://instagram.com/losungsjager" target="_blank">Instagram</a>
     <a href="https://tiktok.com/@losungsjager"   target="_blank">TikTok</a>
-    <a href="mailto:losungsjager@gmail.com">E-mail</a>
+    <a href="/cdn-cgi/l/email-protection#3d51524e48535a4e575c5a584f7d5a505c5451135e5250">E-mail</a>
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   /* ── THEME TOGGLE ── */
   const html     = document.documentElement;
   const metaTheme = document.getElementById('meta-theme');
@@ -1511,12 +1769,4 @@ lastError = tagError;</code></pre>
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
   /* ── NAV SHADOW on scroll ── */
-  window.addEventListener('scroll', () => {
-    const nav = document.getElementById('main-nav');
-    nav.style.boxShadow = window.scrollY > 60
-      ? '0 2px 40px rgba(0,100,100,.12)'
-      : '0 1px 32px rgba(0,212,212,.05)';
-  }, { passive: true });
-</script>
-</body>
-</html>
+  window.addEventListener('scroll'
