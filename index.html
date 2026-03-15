@@ -1095,6 +1095,256 @@
     @media(min-width:961px) {
       .lb-dots { display:none; }
     }
+
+    /* ── SPONSOR TIERS ── */
+    .spons-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+
+    .spons-intro-text {
+      background: var(--surface);
+      padding: 48px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .spons-intro-text p {
+      font-size: 17px;
+      color: var(--text-dim);
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+
+    .spons-intro-text p strong { color: var(--text-bright); }
+
+    .spons-why {
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+      padding: 48px 44px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spons-why::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.04);
+    }
+
+    .spons-why-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .spons-why-icon {
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,.12);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .spons-why-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: rgba(238,238,248,.95);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .spons-why-desc {
+      font-size: 12px;
+      color: rgba(238,238,248,.6);
+      line-height: 1.55;
+    }
+
+    /* tier cards */
+    .spons-tiers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+
+    .tier-card {
+      background: var(--surface);
+      padding: 36px 28px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      overflow: hidden;
+      transition: background .25s, transform .25s;
+    }
+
+    .tier-card:hover {
+      background: var(--surface2);
+      transform: translateY(-4px);
+    }
+
+    .tier-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .tier-ouro::before  { background: linear-gradient(90deg, #C9922A, #F5D06E, #C9922A); }
+    .tier-prata::before { background: linear-gradient(90deg, #7A8A99, #C4CDD6, #7A8A99); }
+    .tier-bronze::before{ background: linear-gradient(90deg, #8B5E3C, #C4855A, #8B5E3C); }
+
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .tier-badge-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .tier-ouro  .tier-badge-dot { background: #F5D06E; box-shadow: 0 0 8px rgba(245,208,110,.5); }
+    .tier-prata .tier-badge-dot { background: #C4CDD6; box-shadow: 0 0 8px rgba(196,205,214,.4); }
+    .tier-bronze .tier-badge-dot{ background: #C4855A; box-shadow: 0 0 8px rgba(196,133,90,.4); }
+
+    .tier-ouro  .tier-badge { color: #F5D06E; }
+    .tier-prata .tier-badge { color: #C4CDD6; }
+    .tier-bronze .tier-badge{ color: #C4855A; }
+
+    .tier-value {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(216,216,232,.07);
+    }
+
+    .tier-benefits {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+      margin-bottom: 28px;
+    }
+
+    .tier-benefit {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.55;
+    }
+
+    .tier-check {
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .tier-ouro  .tier-check { color: #F5D06E; }
+    .tier-prata .tier-check { color: #C4CDD6; }
+    .tier-bronze .tier-check{ color: #C4855A; }
+
+    .tier-benefit strong { color: var(--text); }
+
+    .tier-cta {
+      display: block;
+      text-align: center;
+      padding: 12px 20px;
+      border-radius: 3px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: opacity .2s, transform .2s;
+      margin-top: auto;
+    }
+
+    .tier-cta:hover { opacity: .85; transform: translateY(-1px); }
+
+    .tier-ouro  .tier-cta { background: linear-gradient(135deg,#C9922A,#A67520); color: #0A0720; font-weight: 700; }
+    .tier-prata .tier-cta { background: linear-gradient(135deg,#7A8A99,#5E6E7C); color: #EEEEF8; }
+    .tier-bronze .tier-cta{ background: linear-gradient(135deg,#8B5E3C,#6B4428); color: #EEEEF8; }
+
+    /* featured star on gold */
+    .tier-ouro .tier-featured {
+      position: absolute;
+      top: 14px; right: 16px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #0A0720;
+      background: #F5D06E;
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+
+    /* bottom CTA strip */
+    .spons-bottom {
+      background: var(--surface);
+      padding: 36px 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .spons-bottom-text {
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    .spons-bottom-text strong { color: var(--text-bright); }
+
+    .spons-bottom-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    /* light mode */
+    [data-theme="light"] .spons-why { background: linear-gradient(135deg, #5A1090, #7B2FBE); }
+    [data-theme="light"] .tier-value { color: var(--text-dim); border-bottom-color: rgba(30,24,56,.1); }
+    [data-theme="light"] .spons-bottom-text { color: var(--text-dim); }
+
+    @media (max-width: 960px) {
+      .spons-intro  { grid-template-columns: 1fr; }
+      .spons-tiers  { grid-template-columns: 1fr; }
+      .tier-card    { transform: none !important; }
+      .spons-bottom { flex-direction: column; align-items: flex-start; }
+      .spons-intro-text, .spons-why { padding: 36px 24px; }
+    }
   </style>
 </head>
 <body>
@@ -1392,11 +1642,97 @@
 
 <!-- PATROCÍNIO -->
 <section id="patrocinador" class="sec-border">
-  <div class="spons-box reveal">
-    <h2 class="spons-t">Seja um <span>Patrocinador</span></h2>
-    <p class="spons-p">Ao apoiar a Lösungsjäger, você investe na próxima geração de engenheiros, programadores e líderes. Junte-se a nós na missão de transformar <strong style="color:var(--text-bright)">ciência e tecnologia em impacto humano real.</strong></p>
-    <a href="mailto:losungsjager@gmail.com" class="btn-primary">Entrar em Contato</a>
+  <div class="reveal">
+    <span class="sec-tag">// 09 — Apoio</span>
+    <h2 class="sec-title">Seja um <span>Patrocinador</span></h2>
+    <div class="sec-div"></div>
   </div>
+
+  <!-- intro row -->
+  <div class="spons-intro reveal">
+    <div class="spons-intro-text">
+      <p>Ao apoiar a <strong>Lösungsjäger</strong>, você investe diretamente na próxima geração de engenheiros, programadores e líderes do Brasil. Seu apoio financia materiais, viagens às etapas regionais e nacionais, e a infraestrutura que mantém a equipe competindo.</p>
+      <a href="mailto:losungsjager@gmail.com" class="btn-primary" style="width:fit-content;">Quero patrocinar</a>
+    </div>
+    <div class="spons-why">
+      <div class="spons-why-item">
+        <div class="spons-why-icon">🏆</div>
+        <div>
+          <span class="spons-why-title">Visibilidade nacional</span>
+          <span class="spons-why-desc">A FIRST Tech Challenge reúne centenas de equipes e milhares de espectadores em competições regionais e nacionais.</span>
+        </div>
+      </div>
+      <div class="spons-why-item">
+        <div class="spons-why-icon">🎓</div>
+        <div>
+          <span class="spons-why-title">Investimento em educação</span>
+          <span class="spons-why-desc">Jovens de 14–18 anos aprendem engenharia, programação, gestão e trabalho em equipe na prática.</span>
+        </div>
+      </div>
+      <div class="spons-why-item">
+        <div class="spons-why-icon">🌱</div>
+        <div>
+          <span class="spons-why-title">Impacto social real</span>
+          <span class="spons-why-desc">+240h de voluntariado, 20 ONGs parceiras e projetos que beneficiam comunidades em Porto Alegre.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- tier cards -->
+  <div class="spons-tiers reveal">
+
+    <div class="tier-card tier-ouro">
+      <span class="tier-featured">Destaque</span>
+      <div class="tier-badge"><span class="tier-badge-dot"></span>Ouro</div>
+      <p class="tier-value">Maior visibilidade</p>
+      <ul class="tier-benefits">
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Logo grande</strong> no robô, uniforme e banner da equipe</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Destaque</strong> no site oficial com link para seu site</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Menção exclusiva</strong> em todas as redes sociais (Instagram, TikTok)</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Post dedicado</strong> apresentando sua empresa para nossa comunidade</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Convite VIP</strong> para visitar a equipe e acompanhar uma competição</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Relatório de impacto</strong> ao final da temporada</span></li>
+      </ul>
+      <a href="mailto:losungsjager@gmail.com?subject=Patrocínio Ouro — Lösungsjäger" class="tier-cta">Quero ser Ouro</a>
+    </div>
+
+    <div class="tier-card tier-prata">
+      <div class="tier-badge"><span class="tier-badge-dot"></span>Prata</div>
+      <p class="tier-value">Alta visibilidade</p>
+      <ul class="tier-benefits">
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Logo médio</strong> no robô e no banner da equipe</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Presença</strong> no site oficial com link para seu site</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Menção regular</strong> nas redes sociais ao longo da temporada</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Agradecimento</strong> público nas competições regionais</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Relatório de impacto</strong> ao final da temporada</span></li>
+      </ul>
+      <a href="mailto:losungsjager@gmail.com?subject=Patrocínio Prata — Lösungsjäger" class="tier-cta">Quero ser Prata</a>
+    </div>
+
+    <div class="tier-card tier-bronze">
+      <div class="tier-badge"><span class="tier-badge-dot"></span>Bronze</div>
+      <p class="tier-value">Visibilidade na comunidade</p>
+      <ul class="tier-benefits">
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Logo pequeno</strong> no banner da equipe</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Nome</strong> listado no site oficial</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Menção</strong> nas redes sociais ao início da temporada</span></li>
+        <li class="tier-benefit"><span class="tier-check">◆</span><span><strong>Agradecimento</strong> público nas competições</span></li>
+      </ul>
+      <a href="mailto:losungsjager@gmail.com?subject=Patrocínio Bronze — Lösungsjäger" class="tier-cta">Quero ser Bronze</a>
+    </div>
+
+  </div>
+
+  <!-- bottom CTA -->
+  <div class="spons-bottom reveal">
+    <p class="spons-bottom-text">Tem interesse em um formato personalizado? <strong>Entre em contato</strong> — podemos criar uma proposta sob medida para sua empresa.</p>
+    <div class="spons-bottom-actions">
+      <a href="mailto:losungsjager@gmail.com?subject=Patrocínio Lösungsjäger" class="btn-primary">Enviar e-mail</a>
+      <a href="https://instagram.com/losungsjager" target="_blank" rel="noopener noreferrer" class="btn-secondary">Ver Instagram</a>
+    </div>
+  </div>
+
 </section>
 
 <!-- CÓDIGO / GITHUB -->
