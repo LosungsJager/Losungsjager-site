@@ -849,6 +849,28 @@
     .gh-arrow { color:var(--text-dim); margin-left:auto; transition:transform .2s; }
     .gh-link-card:hover .gh-arrow { transform:translateX(4px); color:var(--cyan); }
     @media(max-width:960px){.github-grid{grid-template-columns:1fr;}.team-grid{grid-template-columns:repeat(2,1fr) !important;}}
+
+    .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
+    .gallery-item{position:relative;aspect-ratio:4/3;overflow:hidden;cursor:pointer;background:var(--surface);}
+    .gallery-item:first-child{grid-column:span 2;aspect-ratio:16/9;}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s,filter .4s;filter:brightness(.9);}
+    .gallery-item:hover img{transform:scale(1.05);filter:brightness(1);}
+    .gallery-caption{position:absolute;bottom:0;left:0;right:0;padding:28px 14px 12px;background:linear-gradient(transparent,rgba(10,7,32,.75));font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;color:rgba(238,238,248,.85);opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;}
+    .gallery-item:hover .gallery-caption{opacity:1;transform:translateY(0);}
+    .gallery-item::after{content:'⤢';position:absolute;top:10px;right:12px;font-size:16px;color:rgba(238,238,248,.7);opacity:0;transition:opacity .3s;pointer-events:none;}
+    .gallery-item:hover::after{opacity:1;}
+    .lightbox{display:none;position:fixed;inset:0;z-index:9000;background:rgba(10,7,32,.95);backdrop-filter:blur(12px);align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+    .lightbox.open{display:flex;}
+    .lightbox img{max-width:92vw;max-height:80vh;object-fit:contain;box-shadow:0 24px 80px rgba(0,0,0,.6);}
+    .lightbox-caption{font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:1px;color:var(--text-dim);text-align:center;max-width:600px;}
+    .lightbox-close{position:absolute;top:20px;right:24px;background:none;border:1px solid rgba(216,216,232,.2);border-radius:50%;width:40px;height:40px;color:var(--text-dim);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;}
+    .lightbox-close:hover{border-color:var(--cyan);color:var(--cyan);}
+    .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(14,14,22,.7);border:1px solid rgba(216,216,232,.15);border-radius:3px;color:var(--text-dim);font-size:22px;width:44px;height:64px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,color .2s;}
+    .lightbox-nav:hover{border-color:var(--cyan);color:var(--cyan);}
+    .lightbox-prev{left:16px;}.lightbox-next{right:16px;}
+    .lightbox-counter{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--text-dim);position:absolute;bottom:20px;left:50%;transform:translateX(-50%);}
+    @media(max-width:960px){.gallery-grid{grid-template-columns:repeat(2,1fr);}.gallery-item:first-child{grid-column:span 2;}.lightbox-nav{display:none;}}
+    @media(max-width:480px){.gallery-grid{grid-template-columns:1fr;}.gallery-item:first-child{grid-column:span 1;}}
   </style>
 </head>
 <body>
@@ -870,6 +892,7 @@
     <li><a href="#outreach">Outreach</a></li>
     <li><a href="#conexoes">Conexões</a></li>
     <li><a href="#metas">Metas</a></li>
+    <li><a href="#fotos">Fotos</a></li>
     <li><a href="#codigo">Código</a></li>
     <li><a href="#patrocinador" class="nav-cta">Patrocinar</a></li>
   </ul>
@@ -888,6 +911,7 @@
   <a href="#outreach"     onclick="closeMenu()">Outreach</a>
   <a href="#conexoes"     onclick="closeMenu()">Conexões</a>
   <a href="#metas"        onclick="closeMenu()">Metas</a>
+  <a href="#fotos"        onclick="closeMenu()">Fotos</a>
   <a href="#codigo"       onclick="closeMenu()">Código</a>
   <a href="#patrocinador" onclick="closeMenu()" class="mob-cta">Patrocinar</a>
 </div>
@@ -1194,6 +1218,32 @@ lastError = tagError;</code>
   </div>
 </section>
 
+<!-- GALERIA -->
+<section id="fotos" class="sec-border">
+  <div class="reveal">
+    <span class="sec-tag">// 08 — Momentos</span>
+    <h2 class="sec-title">Galeria de <span>Fotos</span></h2>
+    <div class="sec-div"></div>
+  </div>
+  <div class="gallery-grid reveal">
+    <div class="gallery-item" onclick="openLightbox(0)" role="button" tabindex="0" aria-label="Equipe celebrando na competição regional"><img src="gallery/foto1.jpg" alt="Equipe celebrando na competição regional" loading="lazy" /><span class="gallery-caption">Equipe celebrando na competição regional</span></div>
+    <div class="gallery-item" onclick="openLightbox(1)" role="button" tabindex="0" aria-label="Preparação do robô na mesa de trabalho"><img src="gallery/foto2.jpg" alt="Preparação do robô na mesa de trabalho" loading="lazy" /><span class="gallery-caption">Preparação do robô na mesa de trabalho</span></div>
+    <div class="gallery-item" onclick="openLightbox(2)" role="button" tabindex="0" aria-label="Foto oficial com a bandeira Lösungsjäger #21342"><img src="gallery/foto3.jpg" alt="Foto oficial com a bandeira Lösungsjäger #21342" loading="lazy" /><span class="gallery-caption">Foto oficial com a bandeira Lösungsjäger #21342</span></div>
+    <div class="gallery-item" onclick="openLightbox(3)" role="button" tabindex="0" aria-label="Equipe em Brasília durante a etapa nacional"><img src="gallery/foto4.jpg" alt="Equipe em Brasília durante a etapa nacional" loading="lazy" /><span class="gallery-caption">Equipe em Brasília durante a etapa nacional</span></div>
+    <div class="gallery-item" onclick="openLightbox(4)" role="button" tabindex="0" aria-label="Robô em ação na pista — temporada DECODE"><img src="gallery/foto5.jpg" alt="Robô em ação na pista — temporada DECODE" loading="lazy" /><span class="gallery-caption">Robô em ação na pista — temporada DECODE</span></div>
+    <div class="gallery-item" onclick="openLightbox(5)" role="button" tabindex="0" aria-label="Inspeção do robô antes da partida"><img src="gallery/foto6.jpg" alt="Inspeção do robô antes da partida" loading="lazy" /><span class="gallery-caption">Inspeção do robô antes da partida</span></div>
+    <div class="gallery-item" onclick="openLightbox(6)" role="button" tabindex="0" aria-label="Manutenção do robô entre as rodadas"><img src="gallery/foto7.jpg" alt="Manutenção do robô entre as rodadas" loading="lazy" /><span class="gallery-caption">Manutenção do robô entre as rodadas</span></div>
+  </div>
+</section>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <button class="lightbox-close" onclick="closeLightbox()" aria-label="Fechar">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)" aria-label="Anterior">&#8249;</button>
+  <img id="lb-img" src="" alt="" />
+  <p class="lightbox-caption" id="lb-cap"></p>
+  <button class="lightbox-nav lightbox-next" onclick="navLightbox(1)" aria-label="Proxima">&#8250;</button>
+  <span class="lightbox-counter" id="lb-counter"></span>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <div>
@@ -1317,6 +1367,17 @@ lastError = tagError;</code>
     var nav=document.getElementById('main-nav');
     if(nav) nav.style.boxShadow=window.scrollY>60?'0 2px 40px rgba(0,100,100,.12)':'0 1px 32px rgba(0,212,212,.05)';
   },{passive:true});
+
+  /* GALLERY LIGHTBOX */
+  var gP=[{s:"gallery/foto1.jpg",c:"Equipe celebrando na competição regional"},{s:"gallery/foto2.jpg",c:"Preparação do robô na mesa de trabalho"},{s:"gallery/foto3.jpg",c:"Foto oficial com a bandeira Lösungsjäger #21342"},{s:"gallery/foto4.jpg",c:"Equipe em Brasília durante a etapa nacional"},{s:"gallery/foto5.jpg",c:"Robô em ação na pista — temporada DECODE"},{s:"gallery/foto6.jpg",c:"Inspeção do robô antes da partida"},{s:"gallery/foto7.jpg",c:"Manutenção do robô entre as rodadas"}];
+  var lbI=0;
+  function openLightbox(i){lbI=i;lbUpdate();document.getElementById("lightbox").classList.add("open");document.body.style.overflow="hidden";}
+  function closeLightbox(){document.getElementById("lightbox").classList.remove("open");document.body.style.overflow="";}
+  function navLightbox(d){lbI=(lbI+d+gP.length)%gP.length;lbUpdate();}
+  function lbUpdate(){var p=gP[lbI];var im=document.getElementById("lb-img");im.src=p.s;im.alt=p.c;document.getElementById("lb-cap").textContent=p.c;document.getElementById("lb-counter").textContent=(lbI+1)+" / "+gP.length;}
+  document.addEventListener("keydown",function(e){var lb=document.getElementById("lightbox");if(!lb.classList.contains("open"))return;if(e.key==="Escape")closeLightbox();if(e.key==="ArrowLeft")navLightbox(-1);if(e.key==="ArrowRight")navLightbox(1);});
+  document.getElementById("lightbox").addEventListener("click",function(e){if(e.target===this)closeLightbox();});
+  document.querySelectorAll(".gallery-item").forEach(function(el,i){el.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" ")openLightbox(i);});});
 </script>
 </body>
 </html>
