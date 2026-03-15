@@ -769,9 +769,10 @@
     }
     [data-theme="light"] .hero-bg {
       background:
-        radial-gradient(ellipse 55% 55% at 68% 50%,rgba(106,31,168,.10) 0%,transparent 70%),
-        radial-gradient(ellipse 35% 50% at 22% 58%,rgba(0,122,136,.06) 0%,transparent 60%),
-        linear-gradient(180deg,var(--black) 0%,var(--dark) 100%);
+        radial-gradient(ellipse 60% 70% at 68% 45%, rgba(123,47,190,.13) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 60% at 15% 80%, rgba(0,122,136,.10) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 85% 90%, rgba(123,47,190,.07) 0%, transparent 55%),
+        linear-gradient(160deg, #EAE6F8 0%, #F2F0FA 40%, #E6EFF8 100%);
     }
     /* THEME TOGGLE */
     .theme-toggle {
@@ -1345,6 +1346,66 @@
       .spons-bottom { flex-direction: column; align-items: flex-start; }
       .spons-intro-text, .spons-why { padding: 36px 24px; }
     }
+
+    /* ── LIGHT MODE HERO EXTRAS ── */
+
+    /* grid lines use purple tint in light mode */
+    [data-theme="light"] .hero-grid-bg {
+      background-image:
+        linear-gradient(rgba(106,31,168,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(106,31,168,.06) 1px, transparent 1px);
+    }
+
+    /* hero tag pill */
+    [data-theme="light"] .hero-tag {
+      border-color: rgba(106,31,168,.28);
+      background: rgba(106,31,168,.06);
+      color: #6A1FA8;
+    }
+
+    [data-theme="light"] .hero-tag::before { background: #7030B8; }
+
+    /* hero title */
+    [data-theme="light"] .hero-title .t1 { color: #0A0720; }
+
+    /* hero description */
+    [data-theme="light"] .hero-desc { color: #48406A; }
+    [data-theme="light"] .hero-desc em { color: #1E1838; }
+
+    /* logo aura — adapt colors for light bg */
+    [data-theme="light"] .logo-wrap::before {
+      background: conic-gradient(from 0deg, #007A88, #7030B8, #007A88);
+      opacity: .22;
+    }
+
+    [data-theme="light"] .logo-wrap::after {
+      border-color: rgba(106,31,168,.18);
+    }
+
+    [data-theme="light"] .hero-logo {
+      filter: drop-shadow(0 0 28px rgba(106,31,168,.35)) drop-shadow(0 0 56px rgba(0,122,136,.18));
+    }
+
+    /* stats bar */
+    [data-theme="light"] .hero-stats {
+      background: rgba(106,31,168,.04);
+      border-color: rgba(106,31,168,.1);
+    }
+
+    [data-theme="light"] .stat-item {
+      border-right-color: rgba(106,31,168,.1);
+    }
+
+    [data-theme="light"] .stat-l { color: #48406A; }
+
+    /* scroll cue */
+    [data-theme="light"] .scroll-cue { color: #7A709A; }
+    [data-theme="light"] .scroll-line {
+      background: linear-gradient(180deg, transparent, #7030B8);
+    }
+
+    /* blink dot in light */
+    [data-theme="light"] #hero .hero-tag::before { background: #6A1FA8; }
   </style>
 </head>
 <body>
